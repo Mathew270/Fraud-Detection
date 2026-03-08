@@ -5,7 +5,7 @@ Tests cover every fraud rule independently and in combination:
   1. huge_amount         — flags transactions >= threshold
   2. location_anomaly    — flags impossible-travel distances
   3. high_frequency      — flags bursts of rapid transactions
-  
+
 Also tests the helper functions:
   - haversine_km()  — geo-distance calculation
   - parse_iso_time() — ISO-8601 timestamp normalisation
@@ -23,6 +23,7 @@ from config import settings
 # =============================================================================
 # haversine_km — great-circle distance
 # =============================================================================
+
 
 class TestHaversineKm:
     """Unit tests for the Haversine distance formula."""
@@ -64,6 +65,7 @@ class TestHaversineKm:
 # parse_iso_time — timestamp normalisation
 # =============================================================================
 
+
 class TestParseIsoTime:
     """Unit tests for ISO-8601 timestamp parsing."""
 
@@ -97,10 +99,13 @@ class TestParseIsoTime:
 # evaluate_fraud — Rule 1: huge_amount
 # =============================================================================
 
+
 class TestHugeAmountRule:
     """Test the high-amount fraud detection rule in isolation."""
 
-    def test_amount_above_threshold_triggers_alert(self, fake_redis, sample_transaction):
+    def test_amount_above_threshold_triggers_alert(
+        self, fake_redis, sample_transaction
+    ):
         """A transaction at or above the threshold should flag 'huge_amount'."""
         txn = sample_transaction(amount=settings.fraud_amount_threshold + 1000)
         is_fraud, reasons, _ = evaluate_fraud(txn, fake_redis)
@@ -129,6 +134,7 @@ class TestHugeAmountRule:
 # =============================================================================
 # evaluate_fraud — Rule 2: location_anomaly
 # =============================================================================
+
 
 class TestLocationAnomalyRule:
     """Test the impossible-travel / location anomaly detection rule."""
@@ -189,6 +195,7 @@ class TestLocationAnomalyRule:
 # evaluate_fraud — Rule 3: high_frequency_transactions
 # =============================================================================
 
+
 class TestHighFrequencyRule:
     """Test the sliding-window, high-frequency transaction detection rule."""
 
@@ -244,6 +251,7 @@ class TestHighFrequencyRule:
 # evaluate_fraud — multiple rules triggered simultaneously
 # =============================================================================
 
+
 class TestMultipleRules:
     """Test scenarios where more than one fraud rule fires at once."""
 
@@ -256,7 +264,7 @@ class TestMultipleRules:
         txn = sample_transaction(
             user_id="u-1001",
             amount=settings.fraud_amount_threshold + 500,
-            latitude=51.5072,   # London
+            latitude=51.5072,  # London
             longitude=-0.1276,
         )
         is_fraud, reasons, _ = evaluate_fraud(txn, fake_redis)
@@ -276,6 +284,7 @@ class TestMultipleRules:
 # =============================================================================
 # evaluate_fraud — Redis state persistence
 # =============================================================================
+
 
 class TestRedisStatePersistence:
     """Verify that evaluate_fraud correctly writes state to Redis for

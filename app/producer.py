@@ -74,6 +74,7 @@ ANOMALY_LOCATIONS = [
 # Transaction generation
 # ---------------------------------------------------------------------------
 
+
 def generate_transaction() -> dict:
     """Build a single randomised transaction dict.
 
@@ -93,7 +94,9 @@ def generate_transaction() -> dict:
         amount = round(random.uniform(5500, 12000), 2)
 
     # Pick user's home location or a distant anomaly location
-    location = random.choice(ANOMALY_LOCATIONS) if is_location_anomaly_case else base_location
+    location = (
+        random.choice(ANOMALY_LOCATIONS) if is_location_anomaly_case else base_location
+    )
     transaction_time = datetime.now(timezone.utc)
 
     return {
@@ -133,10 +136,13 @@ def delivery_report(err, msg):
 # Main producer loop
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     # Expose Prometheus metrics endpoint
     start_http_server(settings.producer_metrics_port)
-    print(f"Prometheus metrics at http://localhost:{settings.producer_metrics_port}/metrics")
+    print(
+        f"Prometheus metrics at http://localhost:{settings.producer_metrics_port}/metrics"
+    )
 
     # Create Kafka producer pointed at the bootstrap server
     producer = Producer({"bootstrap.servers": settings.kafka_bootstrap_servers})

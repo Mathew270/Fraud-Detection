@@ -27,6 +27,7 @@ from config import settings, json_serializer, json_deserializer
 # Scenario 1: Normal transaction sequence — no fraud
 # =============================================================================
 
+
 class TestNormalTransactionSequence:
     """Simulate a user making a series of ordinary purchases in the same city.
     No fraud rule should fire."""
@@ -45,13 +46,16 @@ class TestNormalTransactionSequence:
             )
             is_fraud, reasons, extra = evaluate_fraud(txn, fake_redis)
             # None of these should trigger any fraud rule
-            assert is_fraud is False, f"Transaction {i+1} unexpectedly flagged: {reasons}"
+            assert is_fraud is False, (
+                f"Transaction {i + 1} unexpectedly flagged: {reasons}"
+            )
             assert reasons == []
 
 
 # =============================================================================
 # Scenario 2: Impossible travel detection
 # =============================================================================
+
 
 class TestImpossibleTravelScenario:
     """Simulate a user transacting in Singapore, then immediately in London.
@@ -93,29 +97,43 @@ class TestImpossibleTravelScenario:
         # Distance should be roughly 10,800 km
         assert extra_2["distance_from_last_km"] > settings.location_max_distance_km
 
-    def test_location_history_updates_after_anomaly(self, fake_redis, sample_transaction):
+    def test_location_history_updates_after_anomaly(
+        self, fake_redis, sample_transaction
+    ):
         """After flagging an anomaly, the 'last transaction' in Redis should
         be updated to the new (anomalous) location, so a subsequent
         transaction from that new location is NOT flagged again."""
         # Transaction 1: Singapore
         txn1 = sample_transaction(
-            user_id="u-1001", transaction_id=str(uuid.uuid4()),
-            latitude=1.3521, longitude=103.8198, country="SG", city="Singapore",
+            user_id="u-1001",
+            transaction_id=str(uuid.uuid4()),
+            latitude=1.3521,
+            longitude=103.8198,
+            country="SG",
+            city="Singapore",
         )
         evaluate_fraud(txn1, fake_redis)
 
         # Transaction 2: London (triggers anomaly)
         txn2 = sample_transaction(
-            user_id="u-1001", transaction_id=str(uuid.uuid4()),
-            latitude=51.5072, longitude=-0.1276, country="GB", city="London",
+            user_id="u-1001",
+            transaction_id=str(uuid.uuid4()),
+            latitude=51.5072,
+            longitude=-0.1276,
+            country="GB",
+            city="London",
         )
         evaluate_fraud(txn2, fake_redis)
 
         # Transaction 3: London again (should NOT trigger — same location)
         txn3 = sample_transaction(
-            user_id="u-1001", transaction_id=str(uuid.uuid4()),
+            user_id="u-1001",
+            transaction_id=str(uuid.uuid4()),
             amount=30.0,
-            latitude=51.5072, longitude=-0.1276, country="GB", city="London",
+            latitude=51.5072,
+            longitude=-0.1276,
+            country="GB",
+            city="London",
         )
         is_fraud_3, reasons_3, _ = evaluate_fraud(txn3, fake_redis)
         assert "location_anomaly" not in reasons_3
@@ -124,6 +142,7 @@ class TestImpossibleTravelScenario:
 # =============================================================================
 # Scenario 3: High-frequency burst detection
 # =============================================================================
+
 
 class TestHighFrequencyBurstScenario:
     """Simulate a rapid burst of transactions exceeding the threshold count
@@ -150,11 +169,15 @@ class TestHighFrequencyBurstScenario:
         assert "high_frequency_transactions" in final_reasons
         assert final_extra["recent_transaction_count_in_window"] >= threshold
 
-    def test_transactions_outside_window_not_counted(self, fake_redis, sample_transaction):
+    def test_transactions_outside_window_not_counted(
+        self, fake_redis, sample_transaction
+    ):
         """Transactions with timestamps outside the sliding window should be
         pruned and not count toward the threshold."""
         # Create a transaction with a timestamp far in the past (outside window)
-        old_time = datetime.now(timezone.utc) - timedelta(seconds=settings.repeat_window_seconds + 60)
+        old_time = datetime.now(timezone.utc) - timedelta(
+            seconds=settings.repeat_window_seconds + 60
+        )
         old_txn = sample_transaction(
             user_id="u-1003",
             transaction_id="old-txn-001",
@@ -175,6 +198,7 @@ class TestHighFrequencyBurstScenario:
 # Scenario 4: Multi-user isolation
 # =============================================================================
 
+
 class TestMultiUserIsolation:
     """Verify that fraud detection state is isolated per user — one user's
     activity does not affect another user's evaluation."""
@@ -185,13 +209,17 @@ class TestMultiUserIsolation:
         # User A: send many transactions (triggers high_frequency for user A)
         for _ in range(settings.repeat_txn_count_threshold + 2):
             txn_a = sample_transaction(
-                user_id="u-1001", transaction_id=str(uuid.uuid4()), amount=30.0,
+                user_id="u-1001",
+                transaction_id=str(uuid.uuid4()),
+                amount=30.0,
             )
             evaluate_fraud(txn_a, fake_redis)
 
         # User B: single normal transaction — should be clean
         txn_b = sample_transaction(
-            user_id="u-1002", transaction_id=str(uuid.uuid4()), amount=30.0,
+            user_id="u-1002",
+            transaction_id=str(uuid.uuid4()),
+            amount=30.0,
         )
         is_fraud, reasons, extra = evaluate_fraud(txn_b, fake_redis)
         assert is_fraud is False
@@ -208,8 +236,12 @@ class TestMultiUserIsolation:
         # User B transacts from London — should NOT trigger location_anomaly
         # because user B has no transaction history
         txn_b = sample_transaction(
-            user_id="u-1002", transaction_id=str(uuid.uuid4()),
-            latitude=51.5072, longitude=-0.1276, country="GB", city="London",
+            user_id="u-1002",
+            transaction_id=str(uuid.uuid4()),
+            latitude=51.5072,
+            longitude=-0.1276,
+            country="GB",
+            city="London",
         )
         _, reasons, _ = evaluate_fraud(txn_b, fake_redis)
         assert "location_anomaly" not in reasons
@@ -219,11 +251,14 @@ class TestMultiUserIsolation:
 # Scenario 5: All three rules triggered at once
 # =============================================================================
 
+
 class TestAllRulesTriggered:
     """Scenario where a single transaction triggers all three fraud rules
     simultaneously: huge_amount + location_anomaly + high_frequency."""
 
-    def test_triple_fraud(self, fake_redis, sample_transaction, previous_transaction_in_redis):
+    def test_triple_fraud(
+        self, fake_redis, sample_transaction, previous_transaction_in_redis
+    ):
         """Build up enough history to trigger high_frequency, set up a distant
         previous location, and use a huge amount — all three rules should fire."""
         user = "u-1004"
@@ -234,7 +269,9 @@ class TestAllRulesTriggered:
         # Send (threshold - 1) normal transactions to prime the frequency window
         for _ in range(settings.repeat_txn_count_threshold - 1):
             txn = sample_transaction(
-                user_id=user, transaction_id=str(uuid.uuid4()), amount=20.0,
+                user_id=user,
+                transaction_id=str(uuid.uuid4()),
+                amount=20.0,
             )
             evaluate_fraud(txn, fake_redis)
 
@@ -243,7 +280,7 @@ class TestAllRulesTriggered:
             user_id=user,
             transaction_id=str(uuid.uuid4()),
             amount=settings.fraud_amount_threshold + 5000,
-            latitude=40.7128,   # New York
+            latitude=40.7128,  # New York
             longitude=-74.0060,
             country="US",
             city="New York",
@@ -260,6 +297,7 @@ class TestAllRulesTriggered:
 # =============================================================================
 # Scenario 6: Kafka serialization round-trip
 # =============================================================================
+
 
 class TestSerializationRoundTrip:
     """Verify that a transaction dict survives serialization → deserialization

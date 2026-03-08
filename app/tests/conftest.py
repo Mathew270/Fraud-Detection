@@ -28,6 +28,7 @@ sys.path.insert(0, os.path.abspath(APP_DIR))
 # Fixtures
 # ---------------------------------------------------------------------------
 
+
 @pytest.fixture
 def fake_redis():
     """Return a fakeredis client that behaves like redis.Redis but runs
@@ -35,7 +36,7 @@ def fake_redis():
     never interfere with each other."""
     r = fakeredis.FakeRedis(decode_responses=True)
     yield r
-    r.flushall()   # clean up after the test
+    r.flushall()  # clean up after the test
 
 
 @pytest.fixture
@@ -46,6 +47,7 @@ def sample_transaction():
         txn = sample_transaction()            # defaults
         txn = sample_transaction(amount=9999)  # override specific fields
     """
+
     def _make(**overrides) -> dict:
         now = datetime.now(timezone.utc)
         base = {
@@ -71,6 +73,7 @@ def sample_transaction():
         }
         base.update(overrides)
         return base
+
     return _make
 
 
@@ -82,6 +85,7 @@ def previous_transaction_in_redis(fake_redis):
     Usage:
         previous_transaction_in_redis("u-1001", lat=1.35, lon=103.82, ...)
     """
+
     def _seed(user_id: str, **overrides) -> dict:
         now = datetime.now(timezone.utc)
         data = {
@@ -96,4 +100,5 @@ def previous_transaction_in_redis(fake_redis):
         key = f"user:last_txn:{user_id}"
         fake_redis.setex(key, 86400, json.dumps(data))
         return data
+
     return _seed

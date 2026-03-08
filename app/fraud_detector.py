@@ -66,6 +66,7 @@ WINDOW_TRANSACTION_COUNT = Gauge(
 # Geo-distance helper
 # ---------------------------------------------------------------------------
 
+
 def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Calculate the great-circle distance between two points using the
     Haversine formula. Returns distance in kilometres."""
@@ -75,7 +76,10 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     dphi = math.radians(lat2 - lat1)
     dlambda = math.radians(lon2 - lon1)
 
-    a = math.sin(dphi / 2) ** 2 + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
+    a = (
+        math.sin(dphi / 2) ** 2
+        + math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
+    )
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
     return radius_km * c
 
@@ -92,7 +96,10 @@ def parse_iso_time(timestamp: str) -> datetime:
 # Fraud evaluation logic — all heuristics applied per transaction
 # ---------------------------------------------------------------------------
 
-def evaluate_fraud(txn: dict, redis_client: redis.Redis) -> tuple[bool, list[str], dict]:
+
+def evaluate_fraud(
+    txn: dict, redis_client: redis.Redis
+) -> tuple[bool, list[str], dict]:
     """Evaluate a single transaction against all fraud rules.
 
     Returns:
@@ -179,22 +186,29 @@ def evaluate_fraud(txn: dict, redis_client: redis.Redis) -> tuple[bool, list[str
 # Main consumer loop
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
     # Start the Prometheus metrics HTTP server on its own port
     start_http_server(settings.detector_metrics_port)
-    print(f"Prometheus metrics at http://localhost:{settings.detector_metrics_port}/metrics")
+    print(
+        f"Prometheus metrics at http://localhost:{settings.detector_metrics_port}/metrics"
+    )
 
     # Connect to Redis (decode_responses=True so we get str instead of bytes)
-    redis_client = redis.Redis(host=settings.redis_host, port=settings.redis_port, decode_responses=True)
+    redis_client = redis.Redis(
+        host=settings.redis_host, port=settings.redis_port, decode_responses=True
+    )
 
     # Create a Kafka consumer in the 'fraud-detector-group' consumer group.
     # 'earliest' means if no committed offset exists, start from the beginning.
-    consumer = Consumer({
-        "bootstrap.servers": settings.kafka_bootstrap_servers,
-        "group.id": "fraud-detector-group",
-        "auto.offset.reset": "earliest",
-        "enable.auto.commit": True,
-    })
+    consumer = Consumer(
+        {
+            "bootstrap.servers": settings.kafka_bootstrap_servers,
+            "group.id": "fraud-detector-group",
+            "auto.offset.reset": "earliest",
+            "enable.auto.commit": True,
+        }
+    )
     consumer.subscribe([settings.transactions_topic])
 
     # Producer for publishing fraud alerts to the alerts topic

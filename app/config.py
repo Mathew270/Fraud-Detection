@@ -36,7 +36,9 @@ class Settings:
     # Flag if a single transaction amount is >= this value
     fraud_amount_threshold: float = float(os.getenv("FRAUD_AMOUNT_THRESHOLD", "5000"))
     # Flag if two consecutive transactions are >= this many km apart
-    location_max_distance_km: float = float(os.getenv("LOCATION_MAX_DISTANCE_KM", "800"))
+    location_max_distance_km: float = float(
+        os.getenv("LOCATION_MAX_DISTANCE_KM", "800")
+    )
     # Sliding window length (seconds) for high-frequency detection
     repeat_window_seconds: int = int(os.getenv("REPEAT_WINDOW_SECONDS", "60"))
     # Minimum number of transactions within the window to trigger alert
@@ -46,7 +48,9 @@ class Settings:
     # Each Python process exposes a /metrics endpoint on its own port
     producer_metrics_port: int = int(os.getenv("PRODUCER_METRICS_PORT", "8000"))
     detector_metrics_port: int = int(os.getenv("DETECTOR_METRICS_PORT", "8002"))
-    alert_consumer_metrics_port: int = int(os.getenv("ALERT_CONSUMER_METRICS_PORT", "8003"))
+    alert_consumer_metrics_port: int = int(
+        os.getenv("ALERT_CONSUMER_METRICS_PORT", "8003")
+    )
 
 
 # Single shared instance used across all modules

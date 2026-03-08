@@ -13,12 +13,21 @@ are either not invoked or mocked.
 import uuid
 from unittest.mock import MagicMock
 
-from producer import generate_transaction, delivery_report, USERS, MERCHANT_CATEGORIES, PAYMENT_METHODS, CHANNELS, DEVICE_TYPES
+from producer import (
+    generate_transaction,
+    delivery_report,
+    USERS,
+    MERCHANT_CATEGORIES,
+    PAYMENT_METHODS,
+    CHANNELS,
+    DEVICE_TYPES,
+)
 
 
 # =============================================================================
 # generate_transaction — structure and field validation
 # =============================================================================
+
 
 class TestGenerateTransaction:
     """Verify the shape, types, and constraints of generated transactions."""
@@ -32,11 +41,25 @@ class TestGenerateTransaction:
         """Every transaction must contain all expected fields."""
         txn = generate_transaction()
         required = [
-            "transaction_id", "timestamp", "event_epoch_ms", "user_id",
-            "account_id", "amount", "currency", "merchant_id",
-            "merchant_category", "payment_method", "channel", "card_present",
-            "device_id", "device_type", "ip_address", "country", "city",
-            "latitude", "longitude",
+            "transaction_id",
+            "timestamp",
+            "event_epoch_ms",
+            "user_id",
+            "account_id",
+            "amount",
+            "currency",
+            "merchant_id",
+            "merchant_category",
+            "payment_method",
+            "channel",
+            "card_present",
+            "device_id",
+            "device_type",
+            "ip_address",
+            "country",
+            "city",
+            "latitude",
+            "longitude",
         ]
         for field in required:
             assert field in txn, f"Missing field: {field}"
@@ -122,6 +145,7 @@ class TestGenerateTransaction:
 # =============================================================================
 # delivery_report — Kafka produce callback
 # =============================================================================
+
 
 class TestDeliveryReport:
     """Test the delivery_report callback used by the Kafka producer."""

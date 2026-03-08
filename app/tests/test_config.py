@@ -18,6 +18,7 @@ from config import Settings, settings, json_serializer, json_deserializer
 # Settings defaults
 # =============================================================================
 
+
 class TestSettingsDefaults:
     """Verify that Settings fields have the expected default values
     when no environment variables are set."""
@@ -25,7 +26,10 @@ class TestSettingsDefaults:
     def test_kafka_bootstrap_servers_default(self):
         """Default Kafka address should be the Docker service name."""
         s = Settings()
-        assert s.kafka_bootstrap_servers in ("kafka:9092", settings.kafka_bootstrap_servers)
+        assert s.kafka_bootstrap_servers in (
+            "kafka:9092",
+            settings.kafka_bootstrap_servers,
+        )
 
     def test_redis_host_default(self):
         """Default Redis host should be the Docker service name 'redis'."""
@@ -53,6 +57,7 @@ class TestSettingsDefaults:
 # Immutability
 # =============================================================================
 
+
 class TestSettingsImmutability:
     """Settings is a frozen dataclass — attempts to mutate should raise."""
 
@@ -70,6 +75,7 @@ class TestSettingsImmutability:
 # =============================================================================
 # JSON serializer / deserializer
 # =============================================================================
+
 
 class TestJsonSerializer:
     """json_serializer converts a Python dict to UTF-8 encoded JSON bytes."""

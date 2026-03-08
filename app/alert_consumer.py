@@ -31,17 +31,21 @@ ALERTS_RECEIVED.labels(severity="medium")
 def main() -> None:
     # Expose Prometheus metrics endpoint
     start_http_server(settings.alert_consumer_metrics_port)
-    print(f"Prometheus metrics at http://localhost:{settings.alert_consumer_metrics_port}/metrics")
+    print(
+        f"Prometheus metrics at http://localhost:{settings.alert_consumer_metrics_port}/metrics"
+    )
 
     # Create a Kafka consumer in its own consumer group.
     # This group is separate from the fraud-detector group, so both
     # services independently read from their respective topics.
-    consumer = Consumer({
-        "bootstrap.servers": settings.kafka_bootstrap_servers,
-        "group.id": "alert-service-group",
-        "auto.offset.reset": "earliest",
-        "enable.auto.commit": True,
-    })
+    consumer = Consumer(
+        {
+            "bootstrap.servers": settings.kafka_bootstrap_servers,
+            "group.id": "alert-service-group",
+            "auto.offset.reset": "earliest",
+            "enable.auto.commit": True,
+        }
+    )
     consumer.subscribe([settings.fraud_alerts_topic])
 
     print(f"Listening for alerts on '{settings.fraud_alerts_topic}'...")
