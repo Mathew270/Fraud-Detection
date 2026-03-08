@@ -1,0 +1,18 @@
+# Grafana dashboard provisioning — tells Grafana where to find dashboard
+# JSON files so they appear automatically without manual import.
+
+apiVersion: 1
+
+providers:
+  - name: "Fraud Detection Dashboards"
+    orgId: 1
+    folder: ""
+    type: file
+    disableDeletion: false
+    editable: true
+    # Re-read dashboard JSON files every 10 seconds so changes
+    # on disk are picked up without restarting the container
+    updateIntervalSeconds: 10
+    options:
+      # Path inside the Grafana container where dashboard JSONs are mounted
+      path: /var/lib/grafana/dashboards

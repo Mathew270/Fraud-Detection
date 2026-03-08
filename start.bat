@@ -57,4 +57,6 @@ echo  - Fraud Detector, Producer, Alert Consumer in separate windows
 echo  - Kafka UI:          http://localhost:8080
 echo  - RedisInsight:      http://localhost:8001
 echo  - Redis Commander:   http://localhost:8082
+echo  - Prometheus:        http://localhost:9090
+echo  - Grafana:           http://localhost:3000  (admin / admin)
 echo ============================================================

@@ -1,0 +1,17 @@
+# Grafana datasource provisioning — automatically registers Prometheus
+# as a data source when Grafana starts (no manual UI setup needed).
+#
+# Grafana reads YAML files from /etc/grafana/provisioning/datasources/
+# on startup and creates/updates the listed datasources.
+
+apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    # 'prometheus' is the Docker service name, reachable inside the network
+    url: http://prometheus:9090
+    uid: prometheus
+    isDefault: true
+    editable: true

@@ -23,7 +23,7 @@ echo        Python services stopped.
 REM --- 2. Tear down Docker containers ---
 echo.
 echo [2/2] Stopping Docker Compose services...
-docker compose down
+docker compose down --remove-orphans
 
 echo.
 echo ============================================================

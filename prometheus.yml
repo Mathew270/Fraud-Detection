@@ -1,0 +1,34 @@
+# prometheus.yml — Prometheus scrape configuration.
+#
+# Prometheus periodically sends HTTP GET requests to each target's /metrics
+# endpoint and stores the returned time-series data. Each job below defines
+# a group of targets to scrape.
+
+global:
+  # How often Prometheus collects metrics from all targets
+  scrape_interval: 5s
+  # How often alerting rules are evaluated (not used here, but good practice)
+  evaluation_interval: 5s
+
+scrape_configs:
+  # --- Python application metrics ---
+  # Each Python script exposes Prometheus metrics via prometheus_client's HTTP server.
+  # 'host.docker.internal' lets containers on Docker Desktop reach the host machine.
+
+  - job_name: "producer"
+    static_configs:
+      - targets: ["host.docker.internal:8000"]
+
+  - job_name: "fraud-detector"
+    static_configs:
+      - targets: ["host.docker.internal:8002"]
+
+  - job_name: "alert-consumer"
+    static_configs:
+      - targets: ["host.docker.internal:8003"]
+
+  # --- Redis metrics via redis-exporter sidecar ---
+  # The redis-exporter container translates Redis INFO data into Prometheus format.
+  - job_name: "redis"
+    static_configs:
+      - targets: ["redis-exporter:9121"]
