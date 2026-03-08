@@ -1,0 +1,106 @@
+# =============================================================================
+# CI — Continuous Integration for the Fraud Detection pipeline.
+#
+# Triggers on every push and pull request to main. Runs:
+#   1. Python lint (Ruff) — fast, opinionated Python linter
+#   2. Unit & integration tests (pytest) — no external services needed
+#   3. Import & syntax check — ensures all modules load without errors
+#   4. Docker build — builds the shared app image
+#   5. Docker Compose validation — checks compose config is well-formed
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Lint — static analysis with Ruff
+  # ---------------------------------------------------------------------------
+  lint:
+    name: Lint (Ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Ruff
+        run: pip install ruff
+
+      - name: Run Ruff linter
+        run: ruff check app/
+
+      - name: Run Ruff formatter check
+        run: ruff format --check app/
+
+  # ---------------------------------------------------------------------------
+  # Tests — unit + integration tests using pytest and fakeredis
+  # ---------------------------------------------------------------------------
+  test:
+    name: Tests (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r app/requirements.txt
+          pip install -r app/requirements-test.txt
+
+      - name: Run tests
+        working-directory: app
+        run: pytest --tb=short -v
+
+  # ---------------------------------------------------------------------------
+  # Syntax & import check — catch broken imports or syntax errors early
+  # ---------------------------------------------------------------------------
+  syntax-check:
+    name: Syntax & Import Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r app/requirements.txt
+
+      - name: Check Python syntax (compile all modules)
+        run: python -m py_compile app/config.py app/producer.py app/fraud_detector.py app/alert_consumer.py
+
+  # ---------------------------------------------------------------------------
+  # Docker build — verify the application image builds successfully
+  # ---------------------------------------------------------------------------
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build app image
+        run: docker build -t fraud-detection-app ./app
+
+  # ---------------------------------------------------------------------------
+  # Compose validation — ensure docker-compose.yml is well-formed
+  # ---------------------------------------------------------------------------
+  compose-check:
+    name: Docker Compose Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate docker-compose.yml
+        run: docker compose config --quiet

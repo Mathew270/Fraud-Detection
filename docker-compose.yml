@@ -1,24 +1,42 @@
 # =============================================================================
-# docker-compose.yml — Infrastructure for the fraud detection pipeline.
+# docker-compose.yml — Fully containerised fraud detection pipeline.
 #
 # Services overview:
-#   kafka            — Message broker (KRaft mode, no Zookeeper)
-#   redis            — In-memory state store + RedisInsight UI
-#   kafka-ui         — Web UI for browsing Kafka topics and messages
-#   redis-commander  — Web UI for browsing Redis keys and values
-#   prometheus       — Metrics collection (scrapes /metrics endpoints)
-#   grafana          — Dashboards and alerting on top of Prometheus
-#   redis-exporter   — Translates Redis INFO into Prometheus format
+#
+#   Messaging:
+#     kafka            — Message broker (KRaft mode, no Zookeeper)
+#     kafka-ui         — Web UI for browsing Kafka topics and messages
+#
+#   State store:
+#     redis            — In-memory state store + RedisInsight UI
+#     redis-commander  — Web UI for browsing Redis keys and values
+#
+#   Application:
+#     producer         — Simulated transaction generator (Python)
+#     fraud-detector   — Fraud evaluation engine (Python)
+#     alert-consumer   — Alert display / forwarding service (Python)
+#
+#   Monitoring:
+#     prometheus       — Metrics collection (scrapes /metrics endpoints)
+#     grafana          — Dashboards and alerting on top of Prometheus
+#     redis-exporter   — Translates Redis INFO into Prometheus format
 #
 # Port map:
-#   9094  — Kafka (external listener for host apps)
-#   6379  — Redis data
-#   8001  — RedisInsight UI (built into redis-stack)
-#   8080  — Kafka UI
-#   8082  — Redis Commander UI
-#   9090  — Prometheus UI
-#   3000  — Grafana UI  (login: admin / admin)
-#   9121  — Redis exporter (internal only)
+#   Host-exposed (browser access):
+#     8001:8001  — RedisInsight UI (built into redis-stack)
+#     8080:8080  — Kafka UI
+#     8081:8081  — Redis Commander UI
+#     9090:9090  — Prometheus UI
+#     3000:3000  — Grafana UI  (login: admin / admin)
+#
+#   Internal only (Docker network, not exposed to host):
+#     9092  — Kafka PLAINTEXT listener (container-to-container)
+#     9093  — Kafka CONTROLLER listener (KRaft internal)
+#     6379  — Redis data
+#     8000  — Producer Prometheus metrics
+#     8002  — Fraud detector Prometheus metrics
+#     8003  — Alert consumer Prometheus metrics
+#     9121  — Redis exporter Prometheus metrics
 # =============================================================================
 
 services:
@@ -30,8 +48,9 @@ services:
   kafka:
     image: apache/kafka:3.7.2
     container_name: kafka
-    ports:
-      - "9094:9094"                     # host access via EXTERNAL listener
+    expose:
+      - "9092"                          # PLAINTEXT listener (container-to-container)
+      - "9093"                          # CONTROLLER listener (KRaft internal)
     environment:
       - KAFKA_NODE_ID=1                 # unique broker ID
       - KAFKA_PROCESS_ROLES=broker,controller  # combined mode (single node)
@@ -58,8 +77,9 @@ services:
   redis:
     image: redis/redis-stack:latest
     container_name: redis
+    expose:
+      - "6379"                          # Redis protocol (container-to-container)
     ports:
-      - "6379:6379"                     # Redis protocol (data operations)
       - "8001:8001"                     # RedisInsight web UI
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -91,12 +111,63 @@ services:
     image: rediscommander/redis-commander:latest
     container_name: redis-commander
     ports:
-      - "8082:8081"
+      - "8081:8081"
     depends_on:
       redis:
         condition: service_healthy
     environment:
       - REDIS_HOSTS=local:redis:6379
+
+  # ---------------------------------------------------------------------------
+  # Producer — generates synthetic transactions and sends them to Kafka.
+  # Metrics exposed on port 8000.
+  # ---------------------------------------------------------------------------
+  producer:
+    build: ./app
+    container_name: producer
+    command: ["python", "-u", "producer.py"]    # -u: unbuffered stdout for logs
+    expose:
+      - "8000"                          # Prometheus metrics (scraped over Docker network)
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      fraud-detector:
+        condition: service_started              # ensure consumer is up first
+    restart: on-failure
+
+  # ---------------------------------------------------------------------------
+  # Fraud Detector — consumes transactions, evaluates fraud rules using Redis,
+  # and publishes alerts. Metrics exposed on port 8002.
+  # ---------------------------------------------------------------------------
+  fraud-detector:
+    build: ./app
+    container_name: fraud-detector
+    command: ["python", "-u", "fraud_detector.py"]
+    expose:
+      - "8002"                          # Prometheus metrics (scraped over Docker network)
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: on-failure
+
+  # ---------------------------------------------------------------------------
+  # Alert Consumer — reads fraud alerts and prints them. In production this
+  # would forward to Slack, PagerDuty, etc. Metrics on port 8003.
+  # ---------------------------------------------------------------------------
+  alert-consumer:
+    build: ./app
+    container_name: alert-consumer
+    command: ["python", "-u", "alert_consumer.py"]
+    expose:
+      - "8003"                          # Prometheus metrics (scraped over Docker network)
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: on-failure
 
   # ---------------------------------------------------------------------------
   # Prometheus — scrapes /metrics endpoints from the Python apps and
@@ -110,9 +181,6 @@ services:
     volumes:
       # Mount our scrape config into the container
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    extra_hosts:
-      # Allows Prometheus (inside Docker) to reach Python apps on the host
-      - "host.docker.internal:host-gateway"
     depends_on:
       redis-exporter:
         condition: service_started
@@ -147,8 +215,8 @@ services:
   redis-exporter:
     image: oliver006/redis_exporter:latest
     container_name: redis-exporter
-    ports:
-      - "9121:9121"
+    expose:
+      - "9121"                          # Prometheus metrics (scraped over Docker network)
     environment:
       - REDIS_ADDR=redis://redis:6379
     depends_on:
