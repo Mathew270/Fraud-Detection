@@ -7,6 +7,8 @@ Kafka topic. Transactions are randomly generated with occasional anomalies
 
 Some bursts of rapid-fire transactions are injected (~25% of the time) to
 exercise the high-frequency fraud rule.
+
+Prometheus metrics are exposed so throughput can be monitored in Grafana.
 """
 
 import random
@@ -15,8 +17,26 @@ import uuid
 from datetime import datetime, timezone
 
 from confluent_kafka import Producer
+from confluent_kafka.serialization import SerializationContext, MessageField
+from prometheus_client import Counter, start_http_server
 
 from config import json_serializer, settings
+
+# ---------------------------------------------------------------------------
+# Prometheus metrics
+# ---------------------------------------------------------------------------
+
+# Total transactions successfully produced
+TRANSACTIONS_PRODUCED = Counter(
+    "producer_transactions_produced_total",
+    "Total transactions sent to Kafka",
+)
+
+# Count of produce errors (delivery callback failures)
+PRODUCE_ERRORS = Counter(
+    "producer_errors_total",
+    "Total produce delivery failures",
+)
 
 # ---------------------------------------------------------------------------
 # Simulated user profiles with home locations in Southeast Asia
@@ -102,9 +122,12 @@ def generate_transaction() -> dict:
 
 def delivery_report(err, msg):
     """Callback invoked by the Kafka producer once a message is delivered
-    (or permanently fails)."""
+    (or permanently fails). Updates Prometheus counters."""
     if err is not None:
+        PRODUCE_ERRORS.inc()
         print(f"Delivery failed: {err}")
+    else:
+        TRANSACTIONS_PRODUCED.inc()
 
 
 # ---------------------------------------------------------------------------
@@ -112,6 +135,10 @@ def delivery_report(err, msg):
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    # Expose Prometheus metrics endpoint
+    start_http_server(settings.producer_metrics_port)
+    print(f"Prometheus metrics at http://localhost:{settings.producer_metrics_port}/metrics")
+
     # Create Kafka producer pointed at the bootstrap server
     producer = Producer({"bootstrap.servers": settings.kafka_bootstrap_servers})
 
