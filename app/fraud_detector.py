@@ -9,6 +9,8 @@ Fraud rules:
   1. huge_amount           — single transaction >= configured threshold
   2. location_anomaly      — consecutive transactions far apart geographically
   3. high_frequency        — too many transactions in a short time window
+
+Prometheus metrics are exposed on an HTTP endpoint so they can be scraped.
 """
 
 import json
@@ -17,8 +19,47 @@ from datetime import datetime, timezone
 
 import redis
 from confluent_kafka import Consumer, Producer
+from prometheus_client import Counter, Histogram, Gauge, start_http_server
 
 from config import json_deserializer, json_serializer, settings
+
+# ---------------------------------------------------------------------------
+# Prometheus metrics — these are collected and exposed at /metrics
+# ---------------------------------------------------------------------------
+
+# Total transactions processed, labelled by outcome (ok or fraud)
+TRANSACTIONS_PROCESSED = Counter(
+    "detector_transactions_processed_total",
+    "Total transactions evaluated by the fraud detector",
+    ["outcome"],  # "ok" or "fraud"
+)
+# Pre-initialize both label values so Prometheus sees them from the start
+TRANSACTIONS_PROCESSED.labels(outcome="ok")
+TRANSACTIONS_PROCESSED.labels(outcome="fraud")
+
+# Total fraud alerts broken down by the rule that triggered them
+FRAUD_REASONS = Counter(
+    "detector_fraud_reasons_total",
+    "Count of each fraud reason triggered",
+    ["reason"],  # e.g. "huge_amount", "location_anomaly", "high_frequency_transactions"
+)
+# Pre-initialize all expected reason labels
+FRAUD_REASONS.labels(reason="huge_amount")
+FRAUD_REASONS.labels(reason="location_anomaly")
+FRAUD_REASONS.labels(reason="high_frequency_transactions")
+
+# How long each fraud evaluation takes (seconds)
+EVALUATION_DURATION = Histogram(
+    "detector_evaluation_duration_seconds",
+    "Time spent evaluating a single transaction",
+    buckets=[0.001, 0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5],
+)
+
+# Number of recent transactions in the sliding window (per evaluation)
+WINDOW_TRANSACTION_COUNT = Gauge(
+    "detector_window_transaction_count",
+    "Most recent sliding-window transaction count seen",
+)
 
 
 # ---------------------------------------------------------------------------
@@ -104,6 +145,9 @@ def evaluate_fraud(txn: dict, redis_client: redis.Redis) -> tuple[bool, list[str
     # Auto-expire the key if the user goes inactive
     redis_client.expire(user_txn_zset_key, settings.repeat_window_seconds * 2)
 
+    # Update the Prometheus gauge so we can chart window sizes
+    WINDOW_TRANSACTION_COUNT.set(repeat_count)
+
     if repeat_count >= settings.repeat_txn_count_threshold:
         reasons.append("high_frequency_transactions")
 
@@ -136,6 +180,10 @@ def evaluate_fraud(txn: dict, redis_client: redis.Redis) -> tuple[bool, list[str
 # ---------------------------------------------------------------------------
 
 def main() -> None:
+    # Start the Prometheus metrics HTTP server on its own port
+    start_http_server(settings.detector_metrics_port)
+    print(f"Prometheus metrics at http://localhost:{settings.detector_metrics_port}/metrics")
+
     # Connect to Redis (decode_responses=True so we get str instead of bytes)
     redis_client = redis.Redis(host=settings.redis_host, port=settings.redis_port, decode_responses=True)
 
@@ -169,9 +217,16 @@ def main() -> None:
             # Deserialize the message value from JSON bytes into a dict
             txn = json_deserializer(msg.value())
 
-            is_fraud, reasons, extra = evaluate_fraud(txn, redis_client)
+            # Evaluate fraud — timing is tracked by Prometheus histogram
+            with EVALUATION_DURATION.time():
+                is_fraud, reasons, extra = evaluate_fraud(txn, redis_client)
 
             if is_fraud:
+                # Increment Prometheus counters
+                TRANSACTIONS_PROCESSED.labels(outcome="fraud").inc()
+                for reason in reasons:
+                    FRAUD_REASONS.labels(reason=reason).inc()
+
                 # Build and publish the alert event to the fraud-alerts topic
                 alert_event = {
                     "alert_id": f"alert-{txn['transaction_id']}",
@@ -196,6 +251,7 @@ def main() -> None:
                     f"reasons={','.join(reasons)}",
                 )
             else:
+                TRANSACTIONS_PROCESSED.labels(outcome="ok").inc()
                 print(
                     "OK",
                     txn["transaction_id"],

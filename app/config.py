@@ -39,6 +39,12 @@ class Settings:
     # Minimum number of transactions within the window to trigger alert
     repeat_txn_count_threshold: int = int(os.getenv("REPEAT_TXN_COUNT_THRESHOLD", "4"))
 
+    # --- Prometheus metrics server ---
+    # Each Python process exposes a /metrics endpoint on its own port
+    producer_metrics_port: int = int(os.getenv("PRODUCER_METRICS_PORT", "8000"))
+    detector_metrics_port: int = int(os.getenv("DETECTOR_METRICS_PORT", "8002"))
+    alert_consumer_metrics_port: int = int(os.getenv("ALERT_CONSUMER_METRICS_PORT", "8003"))
+
 
 # Single shared instance used across all modules
 settings = Settings()

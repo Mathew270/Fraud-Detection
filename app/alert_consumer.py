@@ -4,14 +4,35 @@ alert_consumer.py — Fraud alert display service.
 Subscribes to the 'fraud-alerts' Kafka topic and prints each alert to the
 console in a human-readable format. In a production system this would
 forward alerts to a notification service (email, Slack, PagerDuty, etc.).
+
+Prometheus metrics are exposed so alert throughput can be monitored.
 """
 
 from confluent_kafka import Consumer
+from prometheus_client import Counter, start_http_server
 
 from config import json_deserializer, settings
 
+# ---------------------------------------------------------------------------
+# Prometheus metrics
+# ---------------------------------------------------------------------------
+
+# Total alerts received, labelled by severity
+ALERTS_RECEIVED = Counter(
+    "alert_consumer_alerts_received_total",
+    "Total fraud alerts consumed",
+    ["severity"],  # "high" or "medium"
+)
+# Pre-initialize so Prometheus sees both labels immediately
+ALERTS_RECEIVED.labels(severity="high")
+ALERTS_RECEIVED.labels(severity="medium")
+
 
 def main() -> None:
+    # Expose Prometheus metrics endpoint
+    start_http_server(settings.alert_consumer_metrics_port)
+    print(f"Prometheus metrics at http://localhost:{settings.alert_consumer_metrics_port}/metrics")
+
     # Create a Kafka consumer in its own consumer group.
     # This group is separate from the fraud-detector group, so both
     # services independently read from their respective topics.
@@ -39,6 +60,9 @@ def main() -> None:
             alert = json_deserializer(msg.value())
             txn = alert["transaction"]
             reasons = ", ".join(alert["fraud_reasons"])
+
+            # Update Prometheus counter
+            ALERTS_RECEIVED.labels(severity=alert["severity"]).inc()
 
             # Pretty-print the alert to stdout
             print("=" * 80)
