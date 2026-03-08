@@ -16,13 +16,10 @@ Scenarios tested:
 These tests use fakeredis (in-memory) so no external services are required.
 """
 
-import json
 import uuid
 from datetime import datetime, timezone, timedelta
 
-import pytest
-
-from fraud_detector import evaluate_fraud, haversine_km
+from fraud_detector import evaluate_fraud
 from config import settings, json_serializer, json_deserializer
 
 

@@ -15,9 +15,6 @@ All Redis interactions use fakeredis so no running Redis server is needed.
 
 import uuid
 import math
-from datetime import datetime, timezone, timedelta
-
-import pytest
 
 from fraud_detector import haversine_km, parse_iso_time, evaluate_fraud
 from config import settings

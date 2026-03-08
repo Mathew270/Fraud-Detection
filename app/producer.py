@@ -17,7 +17,6 @@ import uuid
 from datetime import datetime, timezone
 
 from confluent_kafka import Producer
-from confluent_kafka.serialization import SerializationContext, MessageField
 from prometheus_client import Counter, start_http_server
 
 from config import json_serializer, settings

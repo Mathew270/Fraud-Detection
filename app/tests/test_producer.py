@@ -13,8 +13,6 @@ are either not invoked or mocked.
 import uuid
 from unittest.mock import MagicMock
 
-import pytest
-
 from producer import generate_transaction, delivery_report, USERS, MERCHANT_CATEGORIES, PAYMENT_METHODS, CHANNELS, DEVICE_TYPES
 
 
