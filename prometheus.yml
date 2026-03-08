@@ -12,20 +12,21 @@ global:
 
 scrape_configs:
   # --- Python application metrics ---
-  # Each Python script exposes Prometheus metrics via prometheus_client's HTTP server.
-  # 'host.docker.internal' lets containers on Docker Desktop reach the host machine.
+  # Each Python service runs inside Docker and exposes Prometheus metrics
+  # via prometheus_client's HTTP server. Container names resolve on the
+  # shared fraud-detection-net network.
 
   - job_name: "producer"
     static_configs:
-      - targets: ["host.docker.internal:8000"]
+      - targets: ["producer:8000"]
 
   - job_name: "fraud-detector"
     static_configs:
-      - targets: ["host.docker.internal:8002"]
+      - targets: ["fraud-detector:8002"]
 
   - job_name: "alert-consumer"
     static_configs:
-      - targets: ["host.docker.internal:8003"]
+      - targets: ["alert-consumer:8003"]
 
   # --- Redis metrics via redis-exporter sidecar ---
   # The redis-exporter container translates Redis INFO data into Prometheus format.

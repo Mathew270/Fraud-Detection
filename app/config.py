@@ -21,8 +21,11 @@ class Settings:
     """Immutable application settings populated from environment variables."""
 
     # --- Infrastructure connection ---
-    kafka_bootstrap_servers: str = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "localhost:9094")
-    redis_host: str = os.getenv("REDIS_HOST", "localhost")
+    # Defaults use Docker service names (container-to-container networking).
+    # When running outside Docker, override via .env or environment variables:
+    #   KAFKA_BOOTSTRAP_SERVERS=localhost:9094  REDIS_HOST=localhost
+    kafka_bootstrap_servers: str = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
+    redis_host: str = os.getenv("REDIS_HOST", "redis")
     redis_port: int = int(os.getenv("REDIS_PORT", "6379"))
 
     # --- Kafka topic names ---
