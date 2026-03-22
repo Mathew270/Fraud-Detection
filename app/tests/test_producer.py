@@ -13,10 +13,10 @@ are either not invoked or mocked.
 import uuid
 from unittest.mock import MagicMock
 
-from producer import (
+from producer import delivery_report
+from transaction_generator import (
     generate_transaction,
-    delivery_report,
-    USERS,
+    _ALL_USERS as USERS,
     MERCHANT_CATEGORIES,
     PAYMENT_METHODS,
     CHANNELS,
