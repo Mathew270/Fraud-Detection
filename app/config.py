@@ -52,6 +52,10 @@ class Settings:
         os.getenv("ALERT_CONSUMER_METRICS_PORT", "8003")
     )
 
+    # --- Producer simulation parameters ---
+    # How many user profiles the producer randomly picks from the generated JSON file
+    num_users: int = int(os.getenv("NUM_USERS", "100"))
+
 
 # Single shared instance used across all modules
 settings = Settings()

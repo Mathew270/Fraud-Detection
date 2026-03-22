@@ -1,0 +1,3002 @@
+{
+  "u-1001": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7791,
+    "lon": 106.6584
+  },
+  "u-1002": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5592,
+    "lon": 104.9665
+  },
+  "u-1003": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3155,
+    "lon": 103.8607
+  },
+  "u-1004": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8015,
+    "lon": 106.6369
+  },
+  "u-1005": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8395,
+    "lon": 96.2227
+  },
+  "u-1006": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5543,
+    "lon": 104.9349
+  },
+  "u-1007": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7305,
+    "lon": 100.475
+  },
+  "u-1008": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2067,
+    "lon": 106.8509
+  },
+  "u-1009": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8342,
+    "lon": 106.6735
+  },
+  "u-1010": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7975,
+    "lon": 100.5173
+  },
+  "u-1011": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7309,
+    "lon": 100.5303
+  },
+  "u-1012": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8131,
+    "lon": 106.5801
+  },
+  "u-1013": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5702,
+    "lon": 121.0139
+  },
+  "u-1014": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7432,
+    "lon": 100.4997
+  },
+  "u-1015": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.0994,
+    "lon": 101.6704
+  },
+  "u-1016": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8802,
+    "lon": 96.1673
+  },
+  "u-1017": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5982,
+    "lon": 104.9134
+  },
+  "u-1018": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5662,
+    "lon": 120.9783
+  },
+  "u-1019": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2003,
+    "lon": 106.8884
+  },
+  "u-1020": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5481,
+    "lon": 104.9497
+  },
+  "u-1021": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5163,
+    "lon": 104.888
+  },
+  "u-1022": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.798,
+    "lon": 106.6138
+  },
+  "u-1023": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7627,
+    "lon": 100.5155
+  },
+  "u-1024": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2135,
+    "lon": 106.803
+  },
+  "u-1025": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1596,
+    "lon": 101.6973
+  },
+  "u-1026": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1205,
+    "lon": 101.685
+  },
+  "u-1027": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7302,
+    "lon": 100.5441
+  },
+  "u-1028": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3871,
+    "lon": 103.8528
+  },
+  "u-1029": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1541,
+    "lon": 101.669
+  },
+  "u-1030": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3132,
+    "lon": 103.8344
+  },
+  "u-1031": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7889,
+    "lon": 106.6531
+  },
+  "u-1032": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1558,
+    "lon": 101.6912
+  },
+  "u-1033": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7537,
+    "lon": 100.4769
+  },
+  "u-1034": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5977,
+    "lon": 104.9753
+  },
+  "u-1035": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2353,
+    "lon": 106.8111
+  },
+  "u-1036": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3947,
+    "lon": 103.8531
+  },
+  "u-1037": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6239,
+    "lon": 120.9487
+  },
+  "u-1038": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8474,
+    "lon": 106.6398
+  },
+  "u-1039": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.9031,
+    "lon": 96.2276
+  },
+  "u-1040": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1781,
+    "lon": 106.7963
+  },
+  "u-1041": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6253,
+    "lon": 120.9885
+  },
+  "u-1042": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8176,
+    "lon": 106.6382
+  },
+  "u-1043": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7656,
+    "lon": 100.4591
+  },
+  "u-1044": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.864,
+    "lon": 106.6682
+  },
+  "u-1045": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5261,
+    "lon": 104.9033
+  },
+  "u-1046": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8614,
+    "lon": 106.6702
+  },
+  "u-1047": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3426,
+    "lon": 103.8492
+  },
+  "u-1048": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8463,
+    "lon": 106.6199
+  },
+  "u-1049": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1759,
+    "lon": 101.713
+  },
+  "u-1050": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1178,
+    "lon": 101.7031
+  },
+  "u-1051": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.0946,
+    "lon": 101.6889
+  },
+  "u-1052": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6161,
+    "lon": 120.9645
+  },
+  "u-1053": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1645,
+    "lon": 101.7283
+  },
+  "u-1054": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7312,
+    "lon": 100.4819
+  },
+  "u-1055": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1054,
+    "lon": 101.6653
+  },
+  "u-1056": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5981,
+    "lon": 121.006
+  },
+  "u-1057": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.245,
+    "lon": 106.8491
+  },
+  "u-1058": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7813,
+    "lon": 100.5373
+  },
+  "u-1059": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1155,
+    "lon": 101.704
+  },
+  "u-1060": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5498,
+    "lon": 120.9845
+  },
+  "u-1061": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7968,
+    "lon": 106.5983
+  },
+  "u-1062": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8682,
+    "lon": 96.1638
+  },
+  "u-1063": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7695,
+    "lon": 100.4694
+  },
+  "u-1064": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3042,
+    "lon": 103.8207
+  },
+  "u-1065": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7783,
+    "lon": 106.6426
+  },
+  "u-1066": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6289,
+    "lon": 121.0082
+  },
+  "u-1067": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8903,
+    "lon": 96.1559
+  },
+  "u-1068": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2045,
+    "lon": 106.8058
+  },
+  "u-1069": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8439,
+    "lon": 96.1722
+  },
+  "u-1070": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8945,
+    "lon": 96.1793
+  },
+  "u-1071": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8352,
+    "lon": 96.1621
+  },
+  "u-1072": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8418,
+    "lon": 106.6049
+  },
+  "u-1073": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.12,
+    "lon": 101.7281
+  },
+  "u-1074": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6258,
+    "lon": 120.9436
+  },
+  "u-1075": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1682,
+    "lon": 101.6585
+  },
+  "u-1076": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1914,
+    "lon": 106.8093
+  },
+  "u-1077": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1432,
+    "lon": 101.6523
+  },
+  "u-1078": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5837,
+    "lon": 120.9564
+  },
+  "u-1079": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5529,
+    "lon": 104.9669
+  },
+  "u-1080": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8187,
+    "lon": 96.185
+  },
+  "u-1081": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8525,
+    "lon": 96.1937
+  },
+  "u-1082": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8019,
+    "lon": 106.6478
+  },
+  "u-1083": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8263,
+    "lon": 106.6081
+  },
+  "u-1084": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6065,
+    "lon": 120.9831
+  },
+  "u-1085": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.17,
+    "lon": 101.67
+  },
+  "u-1086": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3768,
+    "lon": 103.8095
+  },
+  "u-1087": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3802,
+    "lon": 103.7964
+  },
+  "u-1088": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8072,
+    "lon": 106.594
+  },
+  "u-1089": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8254,
+    "lon": 96.1769
+  },
+  "u-1090": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5172,
+    "lon": 104.9163
+  },
+  "u-1091": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5282,
+    "lon": 104.8929
+  },
+  "u-1092": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1632,
+    "lon": 101.7047
+  },
+  "u-1093": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7483,
+    "lon": 100.5507
+  },
+  "u-1094": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1174,
+    "lon": 101.6797
+  },
+  "u-1095": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5097,
+    "lon": 104.8912
+  },
+  "u-1096": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1031,
+    "lon": 101.7193
+  },
+  "u-1097": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.9021,
+    "lon": 96.2345
+  },
+  "u-1098": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.565,
+    "lon": 120.9862
+  },
+  "u-1099": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.153,
+    "lon": 101.6622
+  },
+  "u-1100": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5255,
+    "lon": 104.9596
+  },
+  "u-1101": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5702,
+    "lon": 104.9497
+  },
+  "u-1102": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8489,
+    "lon": 106.643
+  },
+  "u-1103": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7547,
+    "lon": 100.4935
+  },
+  "u-1104": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7813,
+    "lon": 106.6632
+  },
+  "u-1105": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2486,
+    "lon": 106.8243
+  },
+  "u-1106": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5654,
+    "lon": 120.9657
+  },
+  "u-1107": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8315,
+    "lon": 106.6626
+  },
+  "u-1108": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8798,
+    "lon": 96.163
+  },
+  "u-1109": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5972,
+    "lon": 120.9955
+  },
+  "u-1110": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8264,
+    "lon": 106.5809
+  },
+  "u-1111": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3118,
+    "lon": 103.7809
+  },
+  "u-1112": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7725,
+    "lon": 100.504
+  },
+  "u-1113": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1607,
+    "lon": 101.6703
+  },
+  "u-1114": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5372,
+    "lon": 104.9343
+  },
+  "u-1115": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5988,
+    "lon": 121.0188
+  },
+  "u-1116": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5222,
+    "lon": 104.9158
+  },
+  "u-1117": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6145,
+    "lon": 121.0279
+  },
+  "u-1118": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1977,
+    "lon": 106.8317
+  },
+  "u-1119": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.233,
+    "lon": 106.8399
+  },
+  "u-1120": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8256,
+    "lon": 106.5856
+  },
+  "u-1121": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8405,
+    "lon": 96.1765
+  },
+  "u-1122": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.4007,
+    "lon": 103.8098
+  },
+  "u-1123": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1675,
+    "lon": 101.6608
+  },
+  "u-1124": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8399,
+    "lon": 96.2033
+  },
+  "u-1125": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5885,
+    "lon": 121.0084
+  },
+  "u-1126": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.827,
+    "lon": 96.2388
+  },
+  "u-1127": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7972,
+    "lon": 100.4567
+  },
+  "u-1128": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3134,
+    "lon": 103.8381
+  },
+  "u-1129": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8352,
+    "lon": 96.1977
+  },
+  "u-1130": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2271,
+    "lon": 106.8353
+  },
+  "u-1131": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5454,
+    "lon": 104.9155
+  },
+  "u-1132": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1846,
+    "lon": 106.831
+  },
+  "u-1133": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5655,
+    "lon": 120.9842
+  },
+  "u-1134": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2483,
+    "lon": 106.8289
+  },
+  "u-1135": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5721,
+    "lon": 104.933
+  },
+  "u-1136": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3418,
+    "lon": 103.783
+  },
+  "u-1137": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6441,
+    "lon": 120.9402
+  },
+  "u-1138": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.0996,
+    "lon": 101.711
+  },
+  "u-1139": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7989,
+    "lon": 100.5146
+  },
+  "u-1140": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8204,
+    "lon": 106.6171
+  },
+  "u-1141": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6205,
+    "lon": 120.9895
+  },
+  "u-1142": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.811,
+    "lon": 106.5834
+  },
+  "u-1143": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8114,
+    "lon": 106.6442
+  },
+  "u-1144": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2103,
+    "lon": 106.8506
+  },
+  "u-1145": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7758,
+    "lon": 106.6772
+  },
+  "u-1146": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8183,
+    "lon": 106.5943
+  },
+  "u-1147": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1606,
+    "lon": 101.6561
+  },
+  "u-1148": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2542,
+    "lon": 106.8422
+  },
+  "u-1149": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5121,
+    "lon": 104.8871
+  },
+  "u-1150": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1274,
+    "lon": 101.6477
+  },
+  "u-1151": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5316,
+    "lon": 104.9161
+  },
+  "u-1152": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.554,
+    "lon": 121.0025
+  },
+  "u-1153": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2407,
+    "lon": 106.8687
+  },
+  "u-1154": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2218,
+    "lon": 106.8212
+  },
+  "u-1155": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7966,
+    "lon": 100.5064
+  },
+  "u-1156": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1641,
+    "lon": 101.6905
+  },
+  "u-1157": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2246,
+    "lon": 106.8098
+  },
+  "u-1158": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1712,
+    "lon": 101.6874
+  },
+  "u-1159": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8618,
+    "lon": 96.1529
+  },
+  "u-1160": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7752,
+    "lon": 100.5417
+  },
+  "u-1161": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1712,
+    "lon": 101.6715
+  },
+  "u-1162": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.827,
+    "lon": 96.2273
+  },
+  "u-1163": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7871,
+    "lon": 106.6119
+  },
+  "u-1164": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8227,
+    "lon": 106.6628
+  },
+  "u-1165": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8586,
+    "lon": 106.6458
+  },
+  "u-1166": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1277,
+    "lon": 101.6497
+  },
+  "u-1167": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7735,
+    "lon": 100.5116
+  },
+  "u-1168": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.732,
+    "lon": 100.4521
+  },
+  "u-1169": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1756,
+    "lon": 101.6442
+  },
+  "u-1170": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3731,
+    "lon": 103.8331
+  },
+  "u-1171": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7781,
+    "lon": 100.5012
+  },
+  "u-1172": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.6001,
+    "lon": 104.9778
+  },
+  "u-1173": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8487,
+    "lon": 106.608
+  },
+  "u-1174": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1579,
+    "lon": 101.6592
+  },
+  "u-1175": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5532,
+    "lon": 104.9295
+  },
+  "u-1176": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1827,
+    "lon": 106.8294
+  },
+  "u-1177": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5708,
+    "lon": 120.9867
+  },
+  "u-1178": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.9054,
+    "lon": 96.1772
+  },
+  "u-1179": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.562,
+    "lon": 120.9422
+  },
+  "u-1180": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7164,
+    "lon": 100.4903
+  },
+  "u-1181": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1947,
+    "lon": 106.8005
+  },
+  "u-1182": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8567,
+    "lon": 106.6646
+  },
+  "u-1183": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1595,
+    "lon": 106.8485
+  },
+  "u-1184": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1048,
+    "lon": 101.6399
+  },
+  "u-1185": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3685,
+    "lon": 103.7931
+  },
+  "u-1186": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1507,
+    "lon": 101.7308
+  },
+  "u-1187": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1064,
+    "lon": 101.6455
+  },
+  "u-1188": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2398,
+    "lon": 106.8064
+  },
+  "u-1189": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.718,
+    "lon": 100.5103
+  },
+  "u-1190": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5615,
+    "lon": 120.9765
+  },
+  "u-1191": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.9033,
+    "lon": 96.2242
+  },
+  "u-1192": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3057,
+    "lon": 103.8349
+  },
+  "u-1193": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7935,
+    "lon": 106.5897
+  },
+  "u-1194": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5429,
+    "lon": 104.94
+  },
+  "u-1195": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6494,
+    "lon": 120.9569
+  },
+  "u-1196": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8668,
+    "lon": 106.5913
+  },
+  "u-1197": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1401,
+    "lon": 101.6807
+  },
+  "u-1198": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.868,
+    "lon": 106.6113
+  },
+  "u-1199": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5887,
+    "lon": 104.9267
+  },
+  "u-1200": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.0955,
+    "lon": 101.6967
+  },
+  "u-1201": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.8028,
+    "lon": 100.53
+  },
+  "u-1202": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6086,
+    "lon": 120.9635
+  },
+  "u-1203": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.14,
+    "lon": 101.6819
+  },
+  "u-1204": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8323,
+    "lon": 96.1633
+  },
+  "u-1205": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5518,
+    "lon": 120.9954
+  },
+  "u-1206": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5125,
+    "lon": 104.9348
+  },
+  "u-1207": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2069,
+    "lon": 106.8732
+  },
+  "u-1208": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5909,
+    "lon": 121.0078
+  },
+  "u-1209": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2194,
+    "lon": 106.8004
+  },
+  "u-1210": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8641,
+    "lon": 96.2393
+  },
+  "u-1211": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3568,
+    "lon": 103.8132
+  },
+  "u-1212": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8609,
+    "lon": 96.2153
+  },
+  "u-1213": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5922,
+    "lon": 120.9796
+  },
+  "u-1214": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7757,
+    "lon": 100.5324
+  },
+  "u-1215": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8573,
+    "lon": 96.1828
+  },
+  "u-1216": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3633,
+    "lon": 103.8448
+  },
+  "u-1217": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8914,
+    "lon": 96.2142
+  },
+  "u-1218": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3918,
+    "lon": 103.8363
+  },
+  "u-1219": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3769,
+    "lon": 103.8609
+  },
+  "u-1220": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6339,
+    "lon": 120.9699
+  },
+  "u-1221": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.874,
+    "lon": 96.1673
+  },
+  "u-1222": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1686,
+    "lon": 106.8776
+  },
+  "u-1223": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2503,
+    "lon": 106.8777
+  },
+  "u-1224": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5593,
+    "lon": 104.9573
+  },
+  "u-1225": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8724,
+    "lon": 96.2339
+  },
+  "u-1226": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1599,
+    "lon": 106.8653
+  },
+  "u-1227": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2433,
+    "lon": 106.8916
+  },
+  "u-1228": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7883,
+    "lon": 106.6219
+  },
+  "u-1229": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7959,
+    "lon": 100.5289
+  },
+  "u-1230": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5079,
+    "lon": 104.9172
+  },
+  "u-1231": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5873,
+    "lon": 104.912
+  },
+  "u-1232": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.75,
+    "lon": 100.4877
+  },
+  "u-1233": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1665,
+    "lon": 106.8521
+  },
+  "u-1234": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7364,
+    "lon": 100.5358
+  },
+  "u-1235": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7652,
+    "lon": 100.4898
+  },
+  "u-1236": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8493,
+    "lon": 96.1991
+  },
+  "u-1237": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5605,
+    "lon": 120.9587
+  },
+  "u-1238": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1785,
+    "lon": 101.6572
+  },
+  "u-1239": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.564,
+    "lon": 121.0203
+  },
+  "u-1240": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.778,
+    "lon": 106.6257
+  },
+  "u-1241": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8608,
+    "lon": 96.1486
+  },
+  "u-1242": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1875,
+    "lon": 101.6704
+  },
+  "u-1243": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3597,
+    "lon": 103.817
+  },
+  "u-1244": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7894,
+    "lon": 100.5303
+  },
+  "u-1245": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3985,
+    "lon": 103.8277
+  },
+  "u-1246": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2429,
+    "lon": 106.8467
+  },
+  "u-1247": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5371,
+    "lon": 104.9443
+  },
+  "u-1248": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6418,
+    "lon": 120.9596
+  },
+  "u-1249": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5374,
+    "lon": 104.8816
+  },
+  "u-1250": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8542,
+    "lon": 106.63
+  },
+  "u-1251": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5381,
+    "lon": 104.9199
+  },
+  "u-1252": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.8013,
+    "lon": 100.4948
+  },
+  "u-1253": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5571,
+    "lon": 120.9786
+  },
+  "u-1254": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3495,
+    "lon": 103.773
+  },
+  "u-1255": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1484,
+    "lon": 101.6929
+  },
+  "u-1256": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5686,
+    "lon": 120.9777
+  },
+  "u-1257": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7484,
+    "lon": 100.5112
+  },
+  "u-1258": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5496,
+    "lon": 104.8945
+  },
+  "u-1259": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.735,
+    "lon": 100.4945
+  },
+  "u-1260": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5795,
+    "lon": 120.9857
+  },
+  "u-1261": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2489,
+    "lon": 106.8376
+  },
+  "u-1262": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1371,
+    "lon": 101.6662
+  },
+  "u-1263": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1503,
+    "lon": 101.7104
+  },
+  "u-1264": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.9075,
+    "lon": 96.1572
+  },
+  "u-1265": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7155,
+    "lon": 100.466
+  },
+  "u-1266": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3604,
+    "lon": 103.8412
+  },
+  "u-1267": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8446,
+    "lon": 106.6745
+  },
+  "u-1268": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8535,
+    "lon": 106.59
+  },
+  "u-1269": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8052,
+    "lon": 106.6269
+  },
+  "u-1270": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1593,
+    "lon": 101.6676
+  },
+  "u-1271": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2063,
+    "lon": 106.7973
+  },
+  "u-1272": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5183,
+    "lon": 104.9132
+  },
+  "u-1273": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5513,
+    "lon": 121.0165
+  },
+  "u-1274": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7817,
+    "lon": 100.5501
+  },
+  "u-1275": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5269,
+    "lon": 104.9309
+  },
+  "u-1276": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3605,
+    "lon": 103.8089
+  },
+  "u-1277": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6458,
+    "lon": 120.9892
+  },
+  "u-1278": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7959,
+    "lon": 100.4927
+  },
+  "u-1279": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.6041,
+    "lon": 104.8994
+  },
+  "u-1280": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8228,
+    "lon": 96.1602
+  },
+  "u-1281": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5687,
+    "lon": 120.9476
+  },
+  "u-1282": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3476,
+    "lon": 103.7752
+  },
+  "u-1283": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1622,
+    "lon": 101.7037
+  },
+  "u-1284": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3871,
+    "lon": 103.8019
+  },
+  "u-1285": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3173,
+    "lon": 103.8204
+  },
+  "u-1286": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5523,
+    "lon": 121.0149
+  },
+  "u-1287": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3573,
+    "lon": 103.7904
+  },
+  "u-1288": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.098,
+    "lon": 101.6418
+  },
+  "u-1289": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3886,
+    "lon": 103.8524
+  },
+  "u-1290": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5688,
+    "lon": 104.9071
+  },
+  "u-1291": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5828,
+    "lon": 104.9662
+  },
+  "u-1292": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7936,
+    "lon": 100.4654
+  },
+  "u-1293": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8658,
+    "lon": 96.188
+  },
+  "u-1294": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8216,
+    "lon": 96.2236
+  },
+  "u-1295": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3381,
+    "lon": 103.8658
+  },
+  "u-1296": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1812,
+    "lon": 106.8699
+  },
+  "u-1297": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5953,
+    "lon": 120.9372
+  },
+  "u-1298": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5088,
+    "lon": 104.9006
+  },
+  "u-1299": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7616,
+    "lon": 100.5068
+  },
+  "u-1300": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2583,
+    "lon": 106.8138
+  },
+  "u-1301": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5692,
+    "lon": 104.9712
+  },
+  "u-1302": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1072,
+    "lon": 101.6856
+  },
+  "u-1303": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.399,
+    "lon": 103.8482
+  },
+  "u-1304": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7101,
+    "lon": 100.5036
+  },
+  "u-1305": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3869,
+    "lon": 103.7739
+  },
+  "u-1306": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3072,
+    "lon": 103.8238
+  },
+  "u-1307": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8851,
+    "lon": 96.196
+  },
+  "u-1308": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.324,
+    "lon": 103.8207
+  },
+  "u-1309": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8342,
+    "lon": 96.1755
+  },
+  "u-1310": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5982,
+    "lon": 104.9647
+  },
+  "u-1311": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3828,
+    "lon": 103.7781
+  },
+  "u-1312": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5553,
+    "lon": 120.9388
+  },
+  "u-1313": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3341,
+    "lon": 103.8085
+  },
+  "u-1314": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8266,
+    "lon": 106.6638
+  },
+  "u-1315": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3034,
+    "lon": 103.8145
+  },
+  "u-1316": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1756,
+    "lon": 101.7068
+  },
+  "u-1317": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1706,
+    "lon": 106.824
+  },
+  "u-1318": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.8013,
+    "lon": 100.4818
+  },
+  "u-1319": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8405,
+    "lon": 96.2294
+  },
+  "u-1320": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6148,
+    "lon": 120.9514
+  },
+  "u-1321": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2263,
+    "lon": 106.8323
+  },
+  "u-1322": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8504,
+    "lon": 106.6481
+  },
+  "u-1323": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5771,
+    "lon": 121.0324
+  },
+  "u-1324": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.85,
+    "lon": 106.6136
+  },
+  "u-1325": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1813,
+    "lon": 101.6513
+  },
+  "u-1326": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3499,
+    "lon": 103.7729
+  },
+  "u-1327": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1693,
+    "lon": 101.6629
+  },
+  "u-1328": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5579,
+    "lon": 104.8916
+  },
+  "u-1329": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1911,
+    "lon": 106.8365
+  },
+  "u-1330": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2111,
+    "lon": 106.8138
+  },
+  "u-1331": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.6019,
+    "lon": 104.9036
+  },
+  "u-1332": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8505,
+    "lon": 106.6212
+  },
+  "u-1333": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.15,
+    "lon": 101.666
+  },
+  "u-1334": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3789,
+    "lon": 103.8027
+  },
+  "u-1335": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.597,
+    "lon": 121.034
+  },
+  "u-1336": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5612,
+    "lon": 120.9903
+  },
+  "u-1337": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.8043,
+    "lon": 100.497
+  },
+  "u-1338": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5744,
+    "lon": 120.981
+  },
+  "u-1339": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.827,
+    "lon": 106.6287
+  },
+  "u-1340": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1359,
+    "lon": 101.6425
+  },
+  "u-1341": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7902,
+    "lon": 100.4957
+  },
+  "u-1342": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1721,
+    "lon": 101.7139
+  },
+  "u-1343": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7501,
+    "lon": 100.547
+  },
+  "u-1344": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8157,
+    "lon": 106.6009
+  },
+  "u-1345": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.855,
+    "lon": 106.661
+  },
+  "u-1346": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5851,
+    "lon": 104.9597
+  },
+  "u-1347": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1625,
+    "lon": 101.6516
+  },
+  "u-1348": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5831,
+    "lon": 121.0068
+  },
+  "u-1349": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1755,
+    "lon": 101.6979
+  },
+  "u-1350": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8191,
+    "lon": 96.1522
+  },
+  "u-1351": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3582,
+    "lon": 103.8158
+  },
+  "u-1352": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5642,
+    "lon": 104.8852
+  },
+  "u-1353": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5843,
+    "lon": 120.9674
+  },
+  "u-1354": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.802,
+    "lon": 106.6719
+  },
+  "u-1355": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5719,
+    "lon": 104.8943
+  },
+  "u-1356": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5119,
+    "lon": 104.9556
+  },
+  "u-1357": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7938,
+    "lon": 100.5154
+  },
+  "u-1358": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7064,
+    "lon": 100.5295
+  },
+  "u-1359": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7243,
+    "lon": 100.501
+  },
+  "u-1360": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3993,
+    "lon": 103.8366
+  },
+  "u-1361": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1717,
+    "lon": 101.6599
+  },
+  "u-1362": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.807,
+    "lon": 106.6302
+  },
+  "u-1363": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1727,
+    "lon": 106.8379
+  },
+  "u-1364": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3701,
+    "lon": 103.7946
+  },
+  "u-1365": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.718,
+    "lon": 100.4696
+  },
+  "u-1366": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8169,
+    "lon": 96.2283
+  },
+  "u-1367": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2587,
+    "lon": 106.8908
+  },
+  "u-1368": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3304,
+    "lon": 103.7962
+  },
+  "u-1369": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7668,
+    "lon": 100.4757
+  },
+  "u-1370": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1612,
+    "lon": 101.7049
+  },
+  "u-1371": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5246,
+    "lon": 104.914
+  },
+  "u-1372": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8571,
+    "lon": 106.5843
+  },
+  "u-1373": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.533,
+    "lon": 104.9367
+  },
+  "u-1374": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3087,
+    "lon": 103.831
+  },
+  "u-1375": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5415,
+    "lon": 104.9602
+  },
+  "u-1376": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8429,
+    "lon": 96.2436
+  },
+  "u-1377": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1284,
+    "lon": 101.6795
+  },
+  "u-1378": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5947,
+    "lon": 120.9602
+  },
+  "u-1379": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8654,
+    "lon": 106.6608
+  },
+  "u-1380": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7236,
+    "lon": 100.4663
+  },
+  "u-1381": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.9061,
+    "lon": 96.1959
+  },
+  "u-1382": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1918,
+    "lon": 106.8863
+  },
+  "u-1383": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2375,
+    "lon": 106.8195
+  },
+  "u-1384": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1257,
+    "lon": 101.6415
+  },
+  "u-1385": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.175,
+    "lon": 106.8037
+  },
+  "u-1386": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7503,
+    "lon": 100.4856
+  },
+  "u-1387": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6283,
+    "lon": 121.0262
+  },
+  "u-1388": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5413,
+    "lon": 104.9713
+  },
+  "u-1389": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8318,
+    "lon": 96.241
+  },
+  "u-1390": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5521,
+    "lon": 120.9856
+  },
+  "u-1391": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1737,
+    "lon": 106.8813
+  },
+  "u-1392": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1139,
+    "lon": 101.6954
+  },
+  "u-1393": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.793,
+    "lon": 100.487
+  },
+  "u-1394": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2569,
+    "lon": 106.8608
+  },
+  "u-1395": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5968,
+    "lon": 104.9722
+  },
+  "u-1396": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6306,
+    "lon": 121.0257
+  },
+  "u-1397": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.579,
+    "lon": 104.9145
+  },
+  "u-1398": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.857,
+    "lon": 106.5845
+  },
+  "u-1399": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5568,
+    "lon": 120.9494
+  },
+  "u-1400": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1539,
+    "lon": 101.673
+  },
+  "u-1401": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1043,
+    "lon": 101.6987
+  },
+  "u-1402": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8693,
+    "lon": 96.1462
+  },
+  "u-1403": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1603,
+    "lon": 106.8115
+  },
+  "u-1404": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8225,
+    "lon": 96.1717
+  },
+  "u-1405": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3374,
+    "lon": 103.8447
+  },
+  "u-1406": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.6064,
+    "lon": 104.9426
+  },
+  "u-1407": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3442,
+    "lon": 103.7983
+  },
+  "u-1408": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3471,
+    "lon": 103.8037
+  },
+  "u-1409": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5201,
+    "lon": 104.9583
+  },
+  "u-1410": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7657,
+    "lon": 100.5066
+  },
+  "u-1411": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.8054,
+    "lon": 100.4898
+  },
+  "u-1412": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7418,
+    "lon": 100.5447
+  },
+  "u-1413": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7481,
+    "lon": 100.4792
+  },
+  "u-1414": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.825,
+    "lon": 96.2368
+  },
+  "u-1415": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8175,
+    "lon": 96.1525
+  },
+  "u-1416": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7501,
+    "lon": 100.53
+  },
+  "u-1417": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1301,
+    "lon": 101.6708
+  },
+  "u-1418": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3958,
+    "lon": 103.8537
+  },
+  "u-1419": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5703,
+    "lon": 121.0188
+  },
+  "u-1420": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8285,
+    "lon": 106.5869
+  },
+  "u-1421": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5072,
+    "lon": 104.9037
+  },
+  "u-1422": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8601,
+    "lon": 106.6519
+  },
+  "u-1423": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5749,
+    "lon": 104.9265
+  },
+  "u-1424": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2485,
+    "lon": 106.8756
+  },
+  "u-1425": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.637,
+    "lon": 120.9903
+  },
+  "u-1426": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3844,
+    "lon": 103.8497
+  },
+  "u-1427": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7693,
+    "lon": 100.5459
+  },
+  "u-1428": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7648,
+    "lon": 100.5411
+  },
+  "u-1429": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1778,
+    "lon": 106.8835
+  },
+  "u-1430": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.4006,
+    "lon": 103.852
+  },
+  "u-1431": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8193,
+    "lon": 96.2095
+  },
+  "u-1432": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1877,
+    "lon": 101.717
+  },
+  "u-1433": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8614,
+    "lon": 96.2295
+  },
+  "u-1434": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1419,
+    "lon": 101.7181
+  },
+  "u-1435": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5402,
+    "lon": 104.8823
+  },
+  "u-1436": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1031,
+    "lon": 101.661
+  },
+  "u-1437": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6178,
+    "lon": 121.0153
+  },
+  "u-1438": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8926,
+    "lon": 96.211
+  },
+  "u-1439": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.382,
+    "lon": 103.8687
+  },
+  "u-1440": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1705,
+    "lon": 106.8487
+  },
+  "u-1441": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3088,
+    "lon": 103.8115
+  },
+  "u-1442": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2521,
+    "lon": 106.8409
+  },
+  "u-1443": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8505,
+    "lon": 106.6103
+  },
+  "u-1444": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3423,
+    "lon": 103.8186
+  },
+  "u-1445": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7358,
+    "lon": 100.4658
+  },
+  "u-1446": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5582,
+    "lon": 104.9312
+  },
+  "u-1447": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5761,
+    "lon": 104.9694
+  },
+  "u-1448": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3795,
+    "lon": 103.8254
+  },
+  "u-1449": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2088,
+    "lon": 106.8019
+  },
+  "u-1450": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8294,
+    "lon": 96.2277
+  },
+  "u-1451": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5082,
+    "lon": 104.9588
+  },
+  "u-1452": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1189,
+    "lon": 101.666
+  },
+  "u-1453": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1415,
+    "lon": 101.7219
+  },
+  "u-1454": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8845,
+    "lon": 96.1485
+  },
+  "u-1455": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7434,
+    "lon": 100.4718
+  },
+  "u-1456": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8483,
+    "lon": 96.2128
+  },
+  "u-1457": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2288,
+    "lon": 106.8195
+  },
+  "u-1458": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8562,
+    "lon": 106.6674
+  },
+  "u-1459": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8167,
+    "lon": 96.2138
+  },
+  "u-1460": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5439,
+    "lon": 104.9115
+  },
+  "u-1461": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3237,
+    "lon": 103.8445
+  },
+  "u-1462": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6117,
+    "lon": 120.9859
+  },
+  "u-1463": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3364,
+    "lon": 103.8254
+  },
+  "u-1464": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1158,
+    "lon": 101.6693
+  },
+  "u-1465": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5306,
+    "lon": 104.9372
+  },
+  "u-1466": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.7949,
+    "lon": 106.6265
+  },
+  "u-1467": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.318,
+    "lon": 103.8119
+  },
+  "u-1468": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1284,
+    "lon": 101.6995
+  },
+  "u-1469": {
+    "country": "KH",
+    "city": "Phnom Penh",
+    "lat": 11.5248,
+    "lon": 104.8789
+  },
+  "u-1470": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.9135,
+    "lon": 96.1812
+  },
+  "u-1471": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1748,
+    "lon": 101.6695
+  },
+  "u-1472": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5814,
+    "lon": 120.9541
+  },
+  "u-1473": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2118,
+    "lon": 106.8144
+  },
+  "u-1474": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1853,
+    "lon": 101.7229
+  },
+  "u-1475": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.095,
+    "lon": 101.6544
+  },
+  "u-1476": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8366,
+    "lon": 96.171
+  },
+  "u-1477": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1713,
+    "lon": 101.6951
+  },
+  "u-1478": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1024,
+    "lon": 101.6578
+  },
+  "u-1479": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8551,
+    "lon": 96.2047
+  },
+  "u-1480": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5996,
+    "lon": 120.9939
+  },
+  "u-1481": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.2474,
+    "lon": 106.852
+  },
+  "u-1482": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3863,
+    "lon": 103.8678
+  },
+  "u-1483": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7511,
+    "lon": 100.472
+  },
+  "u-1484": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8259,
+    "lon": 96.1553
+  },
+  "u-1485": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3527,
+    "lon": 103.8089
+  },
+  "u-1486": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1658,
+    "lon": 106.8651
+  },
+  "u-1487": {
+    "country": "ID",
+    "city": "Jakarta",
+    "lat": -6.1824,
+    "lon": 106.8243
+  },
+  "u-1488": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5943,
+    "lon": 120.9841
+  },
+  "u-1489": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.5556,
+    "lon": 121.0013
+  },
+  "u-1490": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6001,
+    "lon": 120.9366
+  },
+  "u-1491": {
+    "country": "TH",
+    "city": "Bangkok",
+    "lat": 13.7514,
+    "lon": 100.4945
+  },
+  "u-1492": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.3346,
+    "lon": 103.8275
+  },
+  "u-1493": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8948,
+    "lon": 96.1577
+  },
+  "u-1494": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1684,
+    "lon": 101.7327
+  },
+  "u-1495": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1101,
+    "lon": 101.7225
+  },
+  "u-1496": {
+    "country": "MY",
+    "city": "Kuala Lumpur",
+    "lat": 3.1361,
+    "lon": 101.7042
+  },
+  "u-1497": {
+    "country": "PH",
+    "city": "Manila",
+    "lat": 14.6045,
+    "lon": 120.9411
+  },
+  "u-1498": {
+    "country": "VN",
+    "city": "Ho Chi Minh",
+    "lat": 10.8313,
+    "lon": 106.6162
+  },
+  "u-1499": {
+    "country": "MM",
+    "city": "Yangon",
+    "lat": 16.8961,
+    "lon": 96.1995
+  },
+  "u-1500": {
+    "country": "SG",
+    "city": "Singapore",
+    "lat": 1.346,
+    "lon": 103.7736
+  }
+}
