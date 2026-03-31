@@ -15,67 +15,83 @@ Instead of a single server trying to do everything, the workload is distributed 
 
 ---
 
-## Decision 1: Separating Data from Logic (Single Responsibility)
+## 🏗️ Core Design Decisions
 
-**Context:**  
-Initially, all the simulation data (the list of users, merchant categories, and anomaly locations) was hardcoded directly inside the `producer.py` script. 
+### Decision 1: Separating Data from Logic (Single Responsibility)
+**Context:** Initially, all the simulation data and transaction generation logic were hardcoded inside the `producer.py` script.
 
-**The Decision:**  
-Extract all static testing data into an external JSON file (`app/data/users.json`) and move the data-generation math into a helper module. 
+**The Decision:** Extract all static testing data into an external JSON file (`app/data/users.json`) and move the data-generation math into a helper module. 
 
-**Justification:**  
-The core responsibility of a Kafka Producer script should strictly be connecting to the broker, ensuring message delivery, and reporting metrics. By hardcoding business logic into the streaming worker, we violated the Single Responsibility Principle. Separating data generation from transmission made `producer.py` over 100 lines shorter, universally reusable, and much easier to unit test.
-
-
+**Justification:** The core responsibility of a Kafka Producer script should strictly be connecting to the broker, ensuring message delivery, and reporting metrics. By hardcoding business logic into the streaming worker, we violated the Single Responsibility Principle. Separating data generation from transmission made `producer.py` over 100 lines shorter, universally reusable, and much easier to unit test.
 
 ---
 
-## Decision 2: Declarative Kubernetes vs. Imperative Subprocesses
+### Decision 2: Declarative Kubernetes vs. Imperative Subprocesses
+**Context:** To scale the pipeline, the initial prototype used a local Python Dashboard that executed `subprocess.Popen()` side-by-side on the host machine.
 
-**Context:**  
-To scale the pipeline and simulate heavy traffic, the initial prototype used a local Python Dashboard that executed `subprocess.Popen()` in a loop to spin up multiple instances of the producer script side-by-side on the host machine.
+**The Decision:** Abandon local subprocesses and re-architect the infrastructure to run entirely within a localized Kubernetes cluster (Minikube).
 
-**The Decision:**  
-Abandon local subprocesses and re-architect the infrastructure to run entirely within a localized Kubernetes cluster (Minikube).
-
-**Justification:**  
-Spawning host-OS subprocesses is a brittle framework that fails to replicate a real production environment. It lacks native load balancing, automatic networking, and resilience (if a script crashes, it stays dead). 
-
-Moving to Kubernetes allows the system to utilize **Declarative Infrastructure**. Instead of writing complex loops to track Process IDs and handle crashes, the dashboard simply tells the Kubernetes API, *"I want 10 replicas,"* and the cluster automatically provisions, network-isolates, and sustains the Docker containers.
-
-
+**Justification:** Spawning host-OS subprocesses is a brittle framework that fails to replicate a real production environment. It lacks native load balancing, automatic networking, and resilience. Moving to Kubernetes allows the system to utilize **Declarative Infrastructure**. Instead of writing complex loops to track Process IDs and handle crashes, the dashboard simply tells the Kubernetes API, *"I want 10 replicas,"* and the cluster handles the lifecycle.
 
 ---
 
-## Decision 3: Event-Driven UI (Observability Plane)
+### Decision 3: Polyglot Microservices (Python + Java Spring Boot)
+**Context:** The project requires heavy data simulation/processing ("Workers") and a highly concurrent Enterprise Dashboard ("Control Plane").
 
-**Context:**  
-The initial Dashboard UI streamed real-time logs to the user by attaching Background Daemon Threads directly to the terminal output (`stdout`) of the running Python scripts.
+**The Decision:** Adopt a **Polyglot Architecture**. The Workers remain strictly in Python, while the Control Plane Dashboard is built in Java Spring Boot.
 
-**The Decision:**  
-Transition the UI to act as an asynchronous Kafka Consumer, entirely abandoning terminal log scraping.
-
-**Justification:**  
-While scraping terminal logs works fine for debugging a single script on a laptop, it is considered a massive anti-pattern in distributed systems because it fundamentally cannot scale. If Kubernetes spins up 5 Producer Pods, multiplexing 5 terminal output streams across a network to a web UI is chaotic and prone to dropped data. 
-
-By treating the UI as a native event consumer—subscribing directly to the `transactions` and `fraud-alerts` Kafka topics—the dashboard flawlessly displays true, multiplexed data regardless of how many worker nodes exist.
-
-
-
----
-
-## Decision 4: Polyglot Microservices (Python + Java Spring Boot)
-
-**Context:**  
-The project requires two functionally distinct components: The heavy data simulation and processing (the "Workers"), and a highly concurrent Enterprise Dashboard that exposes REST APIs and streams Server-Sent Events (the "Control Plane").
-
-**The Decision:**  
-Adopt a **Polyglot Architecture**. The Workers remain strictly in Python, while the Control Plane Dashboard is built in Java Spring Boot.
-
-**Justification:**  
-Utilizing a single programming language across an entire stack often leads to compromising on the "right tool for the job." 
-
-- **The Data Plane (Python):** Python is the undisputed industry standard for Data Science and Machine Learning. Building the Fraud Detector model and Kafka consumer/producer workers in Python perfectly mirrors how an enterprise integrates ML.
+**Justification:** Utilizing a single programming language across an entire stack often leads to compromising on the "right tool for the job." 
+- **The Data Plane (Python):** Python is the industry standard for Data Science and Machine Learning. Building the Fraud Detector model and Kafka consumer/producer workers in Python perfectly mirrors how an enterprise integrates ML.
 - **The Control Plane (Java):** Java Spring WebFlux is inherently designed for massive concurrency, non-blocking I/O, and enterprise networking. Furthermore, `Spring Kafka` provides incredibly resilient native handling for concurrent consumer groups. By using Java to orchestrate Kubernetes calls and serve Reactive HTML streams, the system achieves a textbook separation of concerns identical to massive tech enterprises (e.g., Netflix, Uber).
 
+---
 
+### Decision 4: Event-Driven UI (Observability Plane)
+**Context:** The initial Dashboard UI streamed real-time logs to the user by attaching Background Daemon Threads directly to the terminal output (`stdout`) of the running Python scripts.
+
+**The Decision:** Transition the UI to act as an asynchronous Kafka Consumer, entirely abandoning terminal log scraping.
+
+**Justification:** While scraping terminal logs works fine for debugging, it is considered a massive anti-pattern in distributed systems because it fundamentally cannot scale. By treating the UI as a native event consumer—subscribing directly to the `transactions` and `fraud-alerts` Kafka topics—the dashboard flawlessly displays true, multiplexed data regardless of how many worker nodes exist.
+
+---
+
+## 🔒 Security & Orchestration Decisions
+
+### Decision 5: The "Secure Bridge" (Backend as Kafka Proxy)
+**Context:** A common architectural question is whether the React UI should connect directly to Kafka to display transactions.
+
+**The Decision:** The React UI connects strictly to the **Spring Boot Backend (via SSE)**, which acts as a secure translator for the Kafka Broker.
+
+**Justification:** 
+- **Protocol Mismatch:** Browsers use HTTP/WebSockets; Kafka uses a custom TCP-based protocol.
+- **Security:** Connecting from the UI would expose Kafka credentials to the public internet.
+- **Scaling:** If 1,000 users open the UI, 1,000 Kafka connections would overwhelm the broker. The backend acts as a single multi-casting consumer, reducing load and improving reliability.
+
+---
+
+### Decision 6: Secure Orchestration (K8s RBAC & Least Privilege)
+**Context:** The Spring Boot backend runs as a Pod inside the cluster with "power" to trigger orchestration (scaling pods).
+
+**The Decision:** Implement **Role-Based Access Control (RBAC)** to strictly limit the Backend's power.
+
+**Justification:** To avoid the security risk of a "God-mode" pod, the backend is assigned a specific **ServiceAccount** and a **Role**. This Role only grants permission to `patch` the `replicas` of specific worker deployments. It cannot delete databases, change networking, or touch system-critical components, successfully mirroring the **Principle of Least Privilege**.
+
+---
+
+## 📈 Performance & Scaling Decisions
+
+### Decision 7: Scaling Strategy (Single Redis Instance)
+**Context:** Determining if a single Redis service is sufficient for multiple horizontal producers and detectors.
+
+**The Decision:** Utilize a single Redis instance as the centralized state manager for this scale.
+
+**Justification:** A single Redis instance can handle 100,000+ operations per second. At our planned scale (max 5-10 producers), the internal load is negligible. A single instance provides a "Single Source of Truth" without the complexity and networking overhead of a Redis Cluster.
+
+---
+
+### Decision 8: Distributed State vs. Shared Memory (No Local Locks)
+**Context:** Managing high-speed counters and windowed transaction histories across multiple concurrent worker pods.
+
+**The Decision:** Adopt a "Share-Nothing" architecture at the application level, delegating all state synchronization to Redis and Kafka.
+
+**Justification:** Traditional multi-threading requires complex Mutex locks and semaphores to prevent data corruption in shared RAM. In a distributed system, this doesn't work across multiple servers. By moving all state to Redis (which is atomic) and using Kafka for ordering, we eliminated the need for any local locks or complex threading logic. This makes the system "Horizontally Scalable" by design—we can add 100 more workers without any risk of race conditions.
