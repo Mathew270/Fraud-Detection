@@ -5,3 +5,36 @@ __pycache__/
 .env
 app/.venv/
 .pytest_cache/
+
+# dashboard_api
+dashboard_api/HELP.md
+dashboard_api/.gradle/
+dashboard_api/build/
+!dashboard_api/gradle/wrapper/gradle-wrapper.jar
+!dashboard_api/**/src/main/**/build/
+!dashboard_api/**/src/test/**/build/
+
+# IDE and Project specific
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+.idea
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+.vscode/
