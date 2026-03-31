@@ -1,0 +1,35 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.4'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.fraudpipeline'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring WebFlux for SSE and Reactive Streams
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	
+	// Spring Kafka for event ingestion
+	implementation 'org.springframework.kafka:spring-kafka'
+	
+	// Jackson for JSON processing (Manual POJOs)
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

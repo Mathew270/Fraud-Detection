@@ -1,0 +1,27 @@
+server:
+  # Standard port for the Control Plane API
+  port: 8080
+
+spring:
+  application:
+    name: dashboard-api
+  
+  kafka:
+    # Points to the Kafka broker inside the Docker network
+    # For local development, this defaults to localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    
+    consumer:
+      # A unique group ID for the Dashboard listener
+      group-id: fraud-dashboard-group
+      # Ensures the dashboard reads current/new events, not historical data by default
+      auto-offset-reset: latest
+      # Deserialization strategy for raw Kafka messages
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+logging:
+  level:
+    # Verbose logging for our custom packages to help during development
+    com.fraudpipeline.dashboard: DEBUG
+    org.springframework.kafka: INFO
