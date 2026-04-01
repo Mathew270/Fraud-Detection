@@ -18,8 +18,34 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	// --- Runtime Dependencies ---
+
+	// Spring WebFlux: Provides the reactive web server (Netty) and SSE support.
+	// Chosen over spring-boot-starter-web because we need non-blocking I/O
+	// for streaming Kafka events to potentially hundreds of browser clients.
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Spring Kafka: Provides @KafkaListener and KafkaTemplate for consuming
+	// messages from the 'transactions' and 'fraud-alerts' topics.
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// Jackson Databind: Handles JSON <-> Java POJO conversion.
+	// Used to deserialize raw Kafka message strings into TransactionEvent/AlertEvent.
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	// --- Test Dependencies ---
+
+	// Spring Boot Test: Provides @SpringBootTest, MockMvc, and assertion utilities.
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Reactor Test: Provides StepVerifier for testing reactive Flux/Mono streams.
+	testImplementation 'io.projectreactor:reactor-test'
+
+	// Spring Kafka Test: Provides EmbeddedKafkaBroker for integration testing
+	// without needing a real Kafka cluster running.
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+	// JUnit Platform Launcher: Required by Gradle to discover and run JUnit 5 tests.
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

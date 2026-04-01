@@ -1,0 +1,44 @@
+# =============================================================================
+# application.yml — Central configuration for the Dashboard API.
+#
+# This file tells Spring Boot how to connect to the Kafka broker and
+# which port to serve HTTP on. Environment variables can override any
+# value at runtime (e.g. inside a Docker container or K8s pod).
+#
+# Key design decision: We use port 8085 instead of the default 8080
+# because Kafka UI already occupies 8080 in our docker-compose stack.
+# =============================================================================
+
+server:
+  # Serve the API on port 8085 to avoid conflict with Kafka UI (port 8080)
+  port: 8085
+
+spring:
+  application:
+    name: dashboard-api
+
+  kafka:
+    # The Kafka broker address. Defaults to localhost:9094 for local dev
+    # (the EXTERNAL listener in our docker-compose). Override with
+    # SPRING_KAFKA_BOOTSTRAP_SERVERS env var inside Docker/K8s.
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}
+
+    consumer:
+      # Unique consumer group for the dashboard — separate from the
+      # Python fraud-detector-group so both can read independently.
+      group-id: fraud-dashboard-group
+
+      # 'latest' means the dashboard only shows live data from the moment
+      # it connects, not historical messages from before it started.
+      auto-offset-reset: latest
+
+      # Kafka messages arrive as raw strings; Jackson handles the rest.
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# --- Logging levels ---
+# DEBUG for our code during development; INFO for noisy Spring Kafka internals.
+logging:
+  level:
+    com.frauddetection.dashboard_api: DEBUG
+    org.springframework.kafka: INFO
