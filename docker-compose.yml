@@ -123,7 +123,7 @@ services:
   # Metrics exposed on port 8000.
   # ---------------------------------------------------------------------------
   producer:
-    build: ./app
+    build: ./workers
     container_name: producer
     command: ["python", "-u", "producer.py"]    # -u: unbuffered stdout for logs
     expose:
@@ -142,7 +142,7 @@ services:
   # and publishes alerts. Metrics exposed on port 8002.
   # ---------------------------------------------------------------------------
   fraud-detector:
-    build: ./app
+    build: ./workers
     container_name: fraud-detector
     command: ["python", "-u", "fraud_detector.py"]
     expose:
@@ -159,7 +159,7 @@ services:
   # would forward to Slack, PagerDuty, etc. Metrics on port 8003.
   # ---------------------------------------------------------------------------
   alert-consumer:
-    build: ./app
+    build: ./workers
     container_name: alert-consumer
     command: ["python", "-u", "alert_consumer.py"]
     expose:
