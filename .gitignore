@@ -10,9 +10,11 @@ app/.venv/
 dashboard_api/HELP.md
 dashboard_api/.gradle/
 dashboard_api/build/
+dashboard_api/.vscode/
 !dashboard_api/gradle/wrapper/gradle-wrapper.jar
 !dashboard_api/**/src/main/**/build/
 !dashboard_api/**/src/test/**/build/
+
 
 # IDE and Project specific
 .apt_generated
