@@ -20,29 +20,31 @@ repositories {
 dependencies {
 	// --- Runtime Dependencies ---
 
-	// Spring WebFlux: Provides the reactive web server (Netty) and SSE support.
-	// Chosen over spring-boot-starter-web because we need non-blocking I/O
-	// for streaming Kafka events to potentially hundreds of browser clients.
+	// Spring WebFlux: Reactive web server (Netty) with built-in SSE support.
+	// Enables non-blocking streaming of Kafka events to browser clients
+	// via Flux and Reactor Sinks.
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// Spring Kafka: Provides @KafkaListener and KafkaTemplate for consuming
-	// messages from the 'transactions' and 'fraud-alerts' topics.
+	// Spring Kafka: Provides @KafkaListener for consuming messages from
+	// the 'transactions' and 'fraud-alerts' topics. Requires explicit
+	// KafkaConfig since WebFlux does not auto-configure the listener
+	// container factory (see config/KafkaConfig.java).
 	implementation 'org.springframework.kafka:spring-kafka'
 
-	// Jackson Databind: Handles JSON <-> Java POJO conversion.
-	// Used to deserialize raw Kafka message strings into TransactionEvent/AlertEvent.
+	// Jackson Databind: Deserializes raw Kafka JSON strings into Java DTOs
+	// (TransactionEvent, AlertEvent). Used in KafkaConsumerService.
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 	// --- Test Dependencies ---
 
-	// Spring Boot Test: Provides @SpringBootTest, MockMvc, and assertion utilities.
+	// Spring Boot Test: @SpringBootTest, WebTestClient, assertion utilities.
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	// Reactor Test: Provides StepVerifier for testing reactive Flux/Mono streams.
+	// Reactor Test: StepVerifier for testing reactive Flux/Mono streams.
 	testImplementation 'io.projectreactor:reactor-test'
 
-	// Spring Kafka Test: Provides EmbeddedKafkaBroker for integration testing
-	// without needing a real Kafka cluster running.
+	// Spring Kafka Test: EmbeddedKafkaBroker for integration tests
+	// without a real Kafka cluster.
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 
 	// JUnit Platform Launcher: Required by Gradle to discover and run JUnit 5 tests.
@@ -51,4 +53,10 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	// Show detailed pass/fail results for each test in the terminal
+	testLogging {
+		events "passed", "skipped", "failed"
+		showStandardStreams = true // See System.out/System.err in the output
+		exceptionFormat = "full"
+	}
 }
