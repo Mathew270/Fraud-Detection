@@ -78,9 +78,39 @@ Instead of a single server trying to do everything, the workload is distributed 
 
 ---
 
+### Decision 9: Full Stack Containerization (Environment Parity)
+**Context:** Initially, the system relied on the user manually installing Python dependencies and running scripts in separate terminals, which led to "it works on my machine" inconsistencies.
+
+**The Decision:** Fully containerize every component—including the producers, detectors, and the Java API—using **Docker Compose**.
+
+**Justification:** Containerization ensures that the exact same versions of Python, Java, Kafka, and Redis are used across every environment (local dev, CI/CD, and production). By mapping the internal Kafka listener to `kafka:9092`, we eliminated networking bugs caused by mismatched host/container port mappings. The entire pipeline can now be cold-booted with a single command: `docker compose up`.
+
+---
+
+### Decision 10: Reactive SSE Proxy (Project Reactor)
+**Context:** Delivering real-time Kafka events to a web browser requires a bridge that can handle high-frequency updates without blocking the server.
+
+**The Decision:** Implement the `dashboard-api` using **Spring WebFlux** and **Project Reactor Sinks**.
+
+**Justification:** 
+- **Efficiency:** Unlike traditional REST which is "pull-based," Server-Sent Events (SSE) allows the server to "push" data. 
+- **Non-blocking:** WebFlux handles thousands of connections on a small thread pool. 
+- **Multicasting:** By using `Sinks.many().multicast()`, the backend consumes a Kafka message *once* and broadcasts it to *all* connected browsers, significantly reducing the load on the Kafka broker compared to each browser being its own consumer.
+
+---
+
+### Decision 11: Gradle as Build Orchestrator
+**Context:** Choosing between Maven and Gradle for managing the Java Spring Boot ecosystem.
+
+**The Decision:** Adopt **Gradle** (Groovy DSL) as the standard build tool for the project.
+
+**Justification:** Gradle offers superior performance through incremental builds and build caching, which is critical for rapid iteration in a microservices environment. Its flexible DSL makes it easier to manage polyglot deployments where different services might require custom build-stage logic (e.g., multi-stage Docker builds).
+
+---
+
 ## 📈 Performance & Scaling Decisions
 
-### Decision 7: Scaling Strategy (Single Redis Instance)
+### Decision 12: Scaling Strategy (Single Redis Instance)
 **Context:** Determining if a single Redis service is sufficient for multiple horizontal producers and detectors.
 
 **The Decision:** Utilize a single Redis instance as the centralized state manager for this scale.
@@ -89,7 +119,7 @@ Instead of a single server trying to do everything, the workload is distributed 
 
 ---
 
-### Decision 8: Distributed State vs. Shared Memory (No Local Locks)
+### Decision 13: Distributed State vs. Shared Memory (No Local Locks)
 **Context:** Managing high-speed counters and windowed transaction histories across multiple concurrent worker pods.
 
 **The Decision:** Adopt a "Share-Nothing" architecture at the application level, delegating all state synchronization to Redis and Kafka.

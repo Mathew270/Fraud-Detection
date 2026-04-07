@@ -24,9 +24,6 @@ scrape_configs:
     static_configs:
       - targets: ["fraud-detector:8002"]
 
-  - job_name: "alert-consumer"
-    static_configs:
-      - targets: ["alert-consumer:8003"]
 
   # --- Redis metrics via redis-exporter sidecar ---
   # The redis-exporter container translates Redis INFO data into Prometheus format.

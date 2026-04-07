@@ -1,0 +1,62 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '4.0.5'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.frauddetection'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// --- Runtime Dependencies ---
+
+	// Spring WebFlux: Reactive web server (Netty) with built-in SSE support.
+	// Enables non-blocking streaming of Kafka events to browser clients
+	// via Flux and Reactor Sinks.
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// Spring Kafka: Provides @KafkaListener for consuming messages from
+	// the 'transactions' and 'fraud-alerts' topics. Requires explicit
+	// KafkaConfig since WebFlux does not auto-configure the listener
+	// container factory (see config/KafkaConfig.java).
+	implementation 'org.springframework.kafka:spring-kafka'
+
+	// Jackson Databind: Deserializes raw Kafka JSON strings into Java DTOs
+	// (TransactionEvent, AlertEvent). Used in KafkaConsumerService.
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	// --- Test Dependencies ---
+
+	// Spring Boot Test: @SpringBootTest, WebTestClient, assertion utilities.
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Reactor Test: StepVerifier for testing reactive Flux/Mono streams.
+	testImplementation 'io.projectreactor:reactor-test'
+
+	// Spring Kafka Test: EmbeddedKafkaBroker for integration tests
+	// without a real Kafka cluster.
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+	// JUnit Platform Launcher: Required by Gradle to discover and run JUnit 5 tests.
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	// Show detailed pass/fail results for each test in the terminal
+	testLogging {
+		events "passed", "skipped", "failed"
+		showStandardStreams = true // See System.out/System.err in the output
+		exceptionFormat = "full"
+	}
+}
