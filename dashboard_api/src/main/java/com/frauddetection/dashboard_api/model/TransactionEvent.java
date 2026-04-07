@@ -4,13 +4,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Data Transfer Object (DTO) representing a single financial transaction.
+ * DTO representing a single financial transaction.
  *
- * This Java class maps 1:1 to the JSON produced by the Python
- * transaction_generator.py. Jackson uses the @JsonProperty annotations
- * to translate between Python's snake_case and Java's camelCase.
+ * Maps 1:1 to the JSON produced by {@code transaction_generator.py}.
+ * {@link JsonProperty} annotations bridge Python's snake_case field names
+ * to Java's camelCase conventions.
  *
- * Example JSON from the Python producer:
+ * <p>{@link JsonIgnoreProperties} with {@code ignoreUnknown = true} ensures
+ * forward compatibility — new fields added to the Python producer will not
+ * break deserialization on the Java side.
+ *
+ * <p>Example JSON:
+ * <pre>{@code
  * {
  *   "transaction_id": "uuid-here",
  *   "timestamp": "2026-04-01T12:00:00Z",
@@ -23,13 +28,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *   "latitude": 1.3521,
  *   "longitude": 103.8198
  * }
- *
- * NOTE: No Lombok — all getters, setters, and constructors are manual.
+ * }</pre>
  */
-@JsonIgnoreProperties(ignoreUnknown = true) // Safely ignore extra fields we don't need
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class TransactionEvent {
-
-    // --- Fields matching the Python producer's JSON output ---
 
     @JsonProperty("transaction_id")
     private String transactionId;
@@ -80,12 +82,10 @@ public class TransactionEvent {
 
     private double longitude;
 
-    // --- Default No-Args Constructor ---
-    // Required by Jackson for JSON deserialization (it creates an empty
-    // object first, then populates fields via setters or reflection).
+    /** No-args constructor required by Jackson for deserialization. */
     public TransactionEvent() {}
 
-    // --- Full Constructor (for testing and manual instantiation) ---
+    /** Full constructor for programmatic instantiation and testing. */
     public TransactionEvent(String transactionId, String timestamp, long eventEpochMs,
                             String userId, String accountId, double amount, String currency,
                             String merchantId, String merchantCategory, String paymentMethod,
@@ -175,7 +175,7 @@ public class TransactionEvent {
     @Override
     public String toString() {
         return "TransactionEvent{" +
-                "txnId='" + transactionId + '\'' +
+                "transactionId='" + transactionId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", amount=" + amount +
                 ", country='" + country + '\'' +

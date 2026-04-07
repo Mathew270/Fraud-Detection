@@ -6,17 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Data Transfer Object (DTO) representing a fraud alert.
+ * DTO representing a fraud alert.
  *
- * This maps to the alert JSON published by the Python fraud_detector.py
- * to the 'fraud-alerts' Kafka topic. Each alert wraps the offending
- * transaction along with the reasons it was flagged and contextual data.
+ * Maps to the alert JSON published by {@code fraud_detector.py} to the
+ * {@code fraud-alerts} Kafka topic. Each alert wraps the offending
+ * {@link TransactionEvent} along with the fraud reasons and detector context.
  *
- * Example JSON from the Python fraud detector:
+ * <p>Example JSON:
+ * <pre>{@code
  * {
  *   "alert_id": "alert-uuid-here",
  *   "created_at": "2026-04-01T12:00:01Z",
- *   "transaction": { ... full TransactionEvent ... },
+ *   "transaction": { ... },
  *   "fraud_reasons": ["huge_amount", "location_anomaly"],
  *   "detector_context": {
  *     "recent_transaction_count_in_window": 5,
@@ -24,8 +25,7 @@ import java.util.Map;
  *   },
  *   "severity": "high"
  * }
- *
- * NOTE: No Lombok — all getters, setters, and constructors are manual.
+ * }</pre>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AlertEvent {
@@ -36,25 +36,30 @@ public class AlertEvent {
     @JsonProperty("created_at")
     private String createdAt;
 
-    // Nested transaction object — reuses our TransactionEvent DTO.
-    // Jackson automatically deserializes the nested JSON into this field.
+    /**
+     * The transaction that triggered this alert.
+     * Jackson automatically deserializes the nested JSON object.
+     */
     private TransactionEvent transaction;
 
     @JsonProperty("fraud_reasons")
     private List<String> fraudReasons;
 
-    // A flexible map for extra context from the detector (distance, window count, etc.).
-    // Using Map<String, Object> because the Python side can add arbitrary keys.
+    /**
+     * Flexible context from the fraud detector (e.g. distance, window count).
+     * Uses {@code Map<String, Object>} because the Python side may add
+     * arbitrary keys depending on which fraud rules triggered.
+     */
     @JsonProperty("detector_context")
     private Map<String, Object> detectorContext;
 
-    // "high" for huge_amount alerts, "medium" for other types
+    /** Severity level: "high" for huge_amount alerts, "medium" otherwise. */
     private String severity;
 
-    // --- Default No-Args Constructor (required by Jackson) ---
+    /** No-args constructor required by Jackson for deserialization. */
     public AlertEvent() {}
 
-    // --- Full Constructor ---
+    /** Full constructor for programmatic instantiation and testing. */
     public AlertEvent(String alertId, String createdAt, TransactionEvent transaction,
                       List<String> fraudReasons, Map<String, Object> detectorContext,
                       String severity) {
