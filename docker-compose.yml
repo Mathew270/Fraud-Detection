@@ -14,7 +14,7 @@
 #   Application:
 #     producer         — Simulated transaction generator (Python)
 #     fraud-detector   — Fraud evaluation engine (Python)
-#     alert-consumer   — Alert display / forwarding service (Python)
+#     dashboard-api    — Spring Boot SSE proxy for the React UI (Java)
 #
 #   Monitoring:
 #     prometheus       — Metrics collection (scrapes /metrics endpoints)
@@ -26,6 +26,7 @@
 #     8001:8001  — RedisInsight UI (built into redis-stack)
 #     8080:8080  — Kafka UI
 #     8081:8081  — Redis Commander UI
+#     8085:8085  — Dashboard API (SSE endpoints)
 #     9090:9090  — Prometheus UI
 #     3000:3000  — Grafana UI  (login: admin / admin)
 #
@@ -35,7 +36,6 @@
 #     6379  — Redis data
 #     8000  — Producer Prometheus metrics
 #     8002  — Fraud detector Prometheus metrics
-#     8003  — Alert consumer Prometheus metrics
 #     9121  — Redis exporter Prometheus metrics
 # =============================================================================
 
@@ -155,15 +155,15 @@ services:
     restart: on-failure
 
   # ---------------------------------------------------------------------------
-  # Alert Consumer — reads fraud alerts and prints them. In production this
-  # would forward to Slack, PagerDuty, etc. Metrics on port 8003.
+  # Dashboard API — Spring Boot backend that consumes Kafka topics and
+  # streams events to the React UI via Server-Sent Events (SSE).
+  # Replaces alert-consumer.py — the dashboard now handles alert display.
   # ---------------------------------------------------------------------------
-  alert-consumer:
-    build: ./workers
-    container_name: alert-consumer
-    command: ["python", "-u", "alert_consumer.py"]
-    expose:
-      - "8003"                          # Prometheus metrics (scraped over Docker network)
+  dashboard-api:
+    build: ./dashboard_api
+    container_name: dashboard-api
+    ports:
+      - "8085:8085"                     # Dashboard API (exposed to host for browser access)
     depends_on:
       kafka:
         condition: service_healthy
