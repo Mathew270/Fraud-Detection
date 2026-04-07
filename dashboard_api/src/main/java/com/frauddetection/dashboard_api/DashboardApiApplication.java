@@ -7,25 +7,26 @@ import org.springframework.kafka.annotation.EnableKafka;
 /**
  * Entry point for the Fraud Detection Dashboard API.
  *
- * This service acts as the "Secure Bridge" between the Kafka event bus
- * and the React frontend. It consumes messages from Kafka topics and
- * re-broadcasts them to connected browser clients via Server-Sent Events.
+ * This Spring Boot application acts as a proxy between the Kafka event bus
+ * and browser-based clients. It consumes messages from the {@code transactions}
+ * and {@code fraud-alerts} Kafka topics and re-broadcasts them to connected
+ * clients via Server-Sent Events (SSE).
  *
- * @EnableKafka activates Spring's annotation-driven Kafka listener
- * infrastructure, allowing @KafkaListener methods to be discovered.
+ * <p>{@code @EnableKafka} activates Spring's annotation-driven Kafka listener
+ * infrastructure, enabling {@code @KafkaListener} discovery in
+ * {@link com.frauddetection.dashboard_api.service.KafkaConsumerService}.
  *
- * @SpringBootApplication combines three annotations:
- *   - @Configuration:    marks this class as a source of bean definitions
- *   - @ComponentScan:    auto-discovers @Service, @Controller, etc.
- *   - @EnableAutoConfiguration: configures beans based on classpath dependencies
+ * <p>The application runs on an embedded Netty server (provided by
+ * {@code spring-boot-starter-webflux}) on port 8085.
+ *
+ * @see com.frauddetection.dashboard_api.config.KafkaConfig
+ * @see com.frauddetection.dashboard_api.controller.SseController
  */
 @SpringBootApplication
 @EnableKafka
 public class DashboardApiApplication {
 
 	public static void main(String[] args) {
-		// Boots the Spring context and starts the embedded Netty server
-		// (Netty is used instead of Tomcat because we chose WebFlux)
 		SpringApplication.run(DashboardApiApplication.class, args);
 	}
 

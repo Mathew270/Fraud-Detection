@@ -11,86 +11,80 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 
 /**
- * The "Secure Bridge" — the heart of the Kafka-to-SSE proxy architecture.
+ * Kafka-to-SSE bridge service.
  *
- * This service has TWO responsibilities:
- *   1. LISTEN to Kafka topics ('transactions' and 'fraud-alerts')
- *   2. MULTICAST events into Project Reactor Sinks
+ * Listens to the {@code transactions} and {@code fraud-alerts} Kafka topics
+ * and multicasts received events into Project Reactor {@link Sinks}. The
+ * {@link com.frauddetection.dashboard_api.controller.SseController} exposes
+ * these sinks as SSE endpoints, enabling real-time browser streaming.
  *
- * The Sinks act as in-memory "broadcast channels". When the SseController
- * subscribes to getSomethingStream(), it gets a Flux that emits every event
- * the Kafka listener receives. Multiple browser clients can subscribe
- * simultaneously — the Sink handles fan-out automatically.
+ * <p><strong>Sink configuration:</strong>
+ * <ul>
+ *   <li>{@code multicast()} — only active subscribers receive events (no replay)</li>
+ *   <li>{@code directBestEffort()} — drops events for slow subscribers
+ *       rather than buffering indefinitely, preventing out-of-memory errors</li>
+ * </ul>
  *
- * Why Sinks.Many.multicast().directBestEffort()?
- *   - multicast():       only active subscribers receive events (no replay)
- *   - directBestEffort(): if a subscriber can't keep up, drop the event
- *                         rather than buffering indefinitely (prevents OOM)
+ * <p><strong>Deserialization strategy:</strong>
+ * Kafka messages arrive as raw JSON strings (see {@code application.yml}).
+ * This service deserializes them manually using Jackson's {@link ObjectMapper}
+ * because it consumes two topics with different schemas ({@link TransactionEvent}
+ * and {@link AlertEvent}). A single Kafka {@code JsonDeserializer} cannot
+ * handle multiple target types on different topics.
+ *
+ * @see com.frauddetection.dashboard_api.config.KafkaConfig
+ * @see com.frauddetection.dashboard_api.controller.SseController
  */
 @Service
 public class KafkaConsumerService {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerService.class);
 
-    // Jackson ObjectMapper for JSON string -> Java POJO conversion.
-    // Spring auto-configures one; we receive it via constructor injection.
-    private final ObjectMapper objectMapper;
+    /** Jackson ObjectMapper for JSON string → Java POJO conversion. */
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    // Reactive broadcast channels. Events pushed here are fanned out
-    // to every active SSE subscriber connected via the SseController.
+    /** Broadcast sink for transaction events. */
     private final Sinks.Many<TransactionEvent> transactionSink =
             Sinks.many().multicast().directBestEffort();
 
+    /** Broadcast sink for fraud alert events. */
     private final Sinks.Many<AlertEvent> alertSink =
             Sinks.many().multicast().directBestEffort();
 
-    /**
-     * Constructor injection — Spring automatically provides the ObjectMapper.
-     * No @Autowired needed; Spring infers it from the single constructor.
-     */
-    public KafkaConsumerService(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     // =========================================================================
-    // Kafka Listeners — these methods are called automatically by Spring Kafka
-    // whenever a new message arrives on the subscribed topic.
+    // Kafka Listeners
     // =========================================================================
 
     /**
-     * Consumes raw JSON strings from the 'transactions' topic.
+     * Consumes raw JSON messages from the {@code transactions} topic.
      *
-     * Each message is deserialized into a TransactionEvent and pushed
-     * into the transaction Sink for broadcast to SSE subscribers.
+     * <p>Each message is deserialized into a {@link TransactionEvent} and
+     * pushed into the transaction sink for broadcast to SSE subscribers.
+     * Malformed messages are logged and skipped.
      *
-     * The groupId must be unique to this service so it doesn't compete
-     * with the Python fraud-detector-group for the same messages.
+     * @param message raw JSON string from Kafka
      */
     @KafkaListener(topics = "transactions", groupId = "dashboard-tx-group")
     public void listenTransactions(String message) {
         try {
-            // Deserialize the raw Kafka JSON string into our Java DTO
-            TransactionEvent event = objectMapper.readValue(message, TransactionEvent.class);
+            TransactionEvent event = OBJECT_MAPPER.readValue(message, TransactionEvent.class);
             logger.debug("Received transaction: {}", event.getTransactionId());
-
-            // Push into the reactive sink — all SSE subscribers will receive this
             transactionSink.tryEmitNext(event);
         } catch (Exception e) {
-            // Log and continue — a single malformed message shouldn't crash the service
             logger.error("Failed to deserialize transaction: {}", e.getMessage());
         }
     }
 
     /**
-     * Consumes raw JSON strings from the 'fraud-alerts' topic.
-     * These are high-priority events that the dashboard should highlight.
+     * Consumes raw JSON messages from the {@code fraud-alerts} topic.
+     *
+     * @param message raw JSON string from Kafka
      */
     @KafkaListener(topics = "fraud-alerts", groupId = "dashboard-alert-group")
     public void listenAlerts(String message) {
         try {
-            AlertEvent event = objectMapper.readValue(message, AlertEvent.class);
-            logger.info("FRAUD ALERT received: {} | severity={}", event.getAlertId(), event.getSeverity());
-
+            AlertEvent event = OBJECT_MAPPER.readValue(message, AlertEvent.class);
+            logger.info("Fraud alert received: alertId={}, severity={}", event.getAlertId(), event.getSeverity());
             alertSink.tryEmitNext(event);
         } catch (Exception e) {
             logger.error("Failed to deserialize alert: {}", e.getMessage());
@@ -98,19 +92,19 @@ public class KafkaConsumerService {
     }
 
     // =========================================================================
-    // Public stream accessors — used by SseController to create SSE endpoints
+    // Stream accessors (used by SseController)
     // =========================================================================
 
     /**
-     * Returns a Flux of all incoming transactions.
-     * Each SSE subscriber gets their own subscription to this Flux.
+     * Returns a {@link Flux} of all incoming transactions.
+     * Each SSE subscriber receives its own independent subscription.
      */
     public Flux<TransactionEvent> getTransactionStream() {
         return transactionSink.asFlux();
     }
 
     /**
-     * Returns a Flux of all fraud alerts.
+     * Returns a {@link Flux} of all fraud alerts.
      */
     public Flux<AlertEvent> getAlertStream() {
         return alertSink.asFlux();

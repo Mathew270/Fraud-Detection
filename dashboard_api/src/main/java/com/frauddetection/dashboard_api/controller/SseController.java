@@ -13,28 +13,31 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 /**
- * SSE Controller — the "Observability Hub" of the Dashboard.
+ * SSE (Server-Sent Events) streaming controller.
  *
- * This controller exposes Server-Sent Events (SSE) endpoints that the
- * React frontend subscribes to via the browser's EventSource API.
- * Each endpoint returns a Flux that never completes, keeping the HTTP
- * connection open and streaming events as they arrive from Kafka.
+ * Exposes HTTP endpoints that keep connections open and push events to
+ * clients in real time. The React frontend subscribes to these endpoints
+ * using the browser's {@code EventSource} API.
  *
- * Architecture flow:
- *   Python Producer → Kafka → KafkaConsumerService → Reactor Sink → THIS → Browser
+ * <p>Each endpoint returns a {@link Flux} that never completes. Spring
+ * WebFlux serializes each emitted DTO to JSON and wraps it in the SSE
+ * wire format ({@code data:{...}\n\n}), which the browser parses
+ * automatically.
  *
- * @CrossOrigin is required because the React dev server (localhost:5173)
- * runs on a different port than this API (localhost:8085). Without it,
- * the browser would block the SSE connection due to CORS policy.
+ * <p>Data flow:
+ * <pre>
+ *   Python Producer → Kafka → KafkaConsumerService → Reactor Sink → SseController → Browser
+ * </pre>
+ *
+ * @see com.frauddetection.dashboard_api.service.KafkaConsumerService
  */
 @RestController
 @RequestMapping("/api/stream")
-@CrossOrigin(origins = "*") // Allow all origins during development; lock down in production
+@CrossOrigin(origins = "*") // TODO: Restrict to frontend origin in production
 public class SseController {
 
     private static final Logger logger = LoggerFactory.getLogger(SseController.class);
 
-    // Injected by Spring — provides the reactive Flux streams from Kafka
     private final KafkaConsumerService kafkaConsumerService;
 
     public SseController(KafkaConsumerService kafkaConsumerService) {
@@ -42,38 +45,38 @@ public class SseController {
     }
 
     /**
-     * GET /api/stream/transactions
+     * Streams all incoming financial transactions as SSE events.
      *
-     * Returns an SSE stream of all incoming financial transactions.
-     * The browser connects once and receives a continuous flow of events.
+     * <p>{@code MediaType.TEXT_EVENT_STREAM_VALUE} sets the response
+     * Content-Type to {@code text/event-stream}, enabling the browser's
+     * EventSource to parse the response as a continuous event stream.
      *
-     * MediaType.TEXT_EVENT_STREAM_VALUE tells Spring to format the response
-     * as SSE (Content-Type: text/event-stream), which the browser's
-     * EventSource API knows how to parse.
+     * <p>Backpressure is handled by dropping events that a slow client
+     * cannot consume, preventing unbounded memory growth.
      *
-     * Backpressure handling: if a slow client can't keep up, we drop
-     * events rather than buffering them (preventing memory leaks).
+     * @return an infinite Flux of {@link TransactionEvent} objects serialized as JSON
      */
     @GetMapping(value = "/transactions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<TransactionEvent> streamTransactions() {
-        logger.info("New SSE subscriber connected to /api/stream/transactions");
+        logger.info("SSE subscriber connected: /api/stream/transactions");
 
         return kafkaConsumerService.getTransactionStream()
                 .onBackpressureDrop(dropped ->
-                    logger.warn("Backpressure: dropped transaction for user {}", dropped.getUserId())
+                    logger.warn("Dropped transaction event (backpressure): userId={}", dropped.getUserId())
                 );
     }
 
     /**
-     * GET /api/stream/alerts
+     * Streams fraud alerts as SSE events.
      *
-     * Dedicated SSE stream for high-priority fraud alerts.
-     * The React dashboard uses this to trigger visual notifications
-     * (glowing red cards, sound effects, etc.)
+     * <p>These are high-priority events triggered by the Python fraud detector.
+     * The frontend typically renders these with prominent visual indicators.
+     *
+     * @return an infinite Flux of {@link AlertEvent} objects serialized as JSON
      */
     @GetMapping(value = "/alerts", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<AlertEvent> streamAlerts() {
-        logger.info("New SSE subscriber connected to /api/stream/alerts");
+        logger.info("SSE subscriber connected: /api/stream/alerts");
 
         return kafkaConsumerService.getAlertStream();
     }
