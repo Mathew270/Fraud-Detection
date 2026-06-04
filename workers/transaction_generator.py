@@ -18,10 +18,9 @@ except FileNotFoundError:
     _ALL_USERS = {
         "u-1001": {"country": "SG", "city": "Singapore", "lat": 1.3521, "lon": 103.8198},
     }
-
-# Restrict the active simulation pool based on configured dashboard limit
-ACTIVE_USER_IDS = list(_ALL_USERS.keys())[:settings.num_users]
-
+# We no longer statically slice this list because num_users can scale at runtime.
+# See generate_transaction() below for dynamic slicing.
+# ACTIVE_USER_IDS = list(_ALL_USERS.keys())[:settings.num_users]
 # Possible values for transaction metadata fields
 MERCHANT_CATEGORIES = [
     "grocery",
@@ -51,7 +50,14 @@ def generate_transaction() -> dict:
     ~10% chance of a large amount (>= fraud threshold).
     ~8%  chance of an anomalous location (far from user's home).
     """
-    user_id = random.choice(ACTIVE_USER_IDS)
+    from redis_listener import config_state
+    
+    # Dynamically select the pool of active users based on the live Redis config
+    active_user_ids = list(_ALL_USERS.keys())[:config_state.num_users]
+    if not active_user_ids: # Safety fallback if UI sends num_users=0
+        active_user_ids = list(_ALL_USERS.keys())[:1]
+        
+    user_id = random.choice(active_user_ids)
     base_location = _ALL_USERS[user_id]
 
     # Decide whether this transaction should be anomalous

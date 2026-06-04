@@ -1,0 +1,64 @@
+# =============================================================================
+# application.yml — Cluster Controller Configuration
+#
+# This file configures:
+#   1. The gRPC server port (where other services send gRPC requests TO us).
+#   2. The Redis connection (where we PUBLISH simulation config changes).
+#   3. The path to the docker-compose project (so we can run scaling commands).
+#
+# WHY A SEPARATE PORT FOR GRPC?
+#   gRPC uses HTTP/2, which is a different protocol from regular HTTP/1.1.
+#   We run the gRPC server on port 9090 so it doesn't conflict with any
+#   REST endpoints we might add in the future. The API Gateway will be the
+#   one translating REST requests from the frontend into gRPC calls to us.
+# =============================================================================
+
+spring:
+  application:
+    name: cluster-controller
+
+  # --- Redis Configuration ---
+  # Redis acts as our "broadcasting tower." When the controller receives
+  # a simulation config change via gRPC, it publishes the new values to
+  # a Redis Pub/Sub channel. All Python producer containers are subscribed
+  # to this channel and update their internal variables instantly.
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+
+  # --- Spring Profiles ---
+  # This controls which OrchestratorService implementation Spring uses.
+  # "docker" = uses Docker CLI commands to scale containers.
+  # "kubernetes" = (future) uses the K8s API via Fabric8.
+  # You can override this at runtime with: SPRING_PROFILES_ACTIVE=kubernetes
+  profiles:
+    active: ${ORCHESTRATOR_PROFILE:docker}
+
+# --- gRPC Server Configuration ---
+# This is read by the grpc-spring-boot-starter library.
+# It tells it "start a gRPC listener on port 9090."
+grpc:
+  server:
+    port: 9095
+
+# --- Custom Application Properties ---
+# These are our own custom config keys (not part of any framework).
+# We read them in Java using @Value("${cluster.compose-project-dir}").
+cluster:
+  # The absolute path to the directory containing docker-compose.yml.
+  # This is needed because we run `docker compose` CLI commands to scale services.
+  # Inside Docker, this will be mounted as a volume from the host.
+  compose-project-dir: ${COMPOSE_PROJECT_DIR:/app/project}
+
+  # The list of services that the controller is allowed to scale.
+  # This acts as a safety guard — if someone tries to scale "kafka" or "redis"
+  # through the API, we reject it because those are infrastructure services
+  # that should NOT be dynamically scaled by the controller.
+  scalable-services: producer,fraud-detector
+
+# --- Logging ---
+logging:
+  level:
+    "[com.frauddetection.cluster_controller]": DEBUG
+    "[io.grpc]": INFO
