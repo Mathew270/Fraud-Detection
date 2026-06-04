@@ -65,9 +65,10 @@ def main() -> None:
     print(f"Producing to topic '{settings.transactions_topic}'...")
     try:
         while True:
-            # ~25% chance of a burst (2–5 rapid transactions in a row)
-            # to exercise the high-frequency fraud rule
-            burst_mode = random.random() < 0.25
+            # Dynamic chance of a burst (2–5 rapid transactions in a row)
+            # controlled live by the Cluster Controller via Redis.
+            from redis_listener import config_state
+            burst_mode = random.random() < config_state.burst_probability
             burst_count = random.randint(2, 5) if burst_mode else 1
 
             for _ in range(burst_count):
@@ -90,8 +91,10 @@ def main() -> None:
 
             # Flush ensures all buffered messages are actually sent
             producer.flush()
-            # Random delay between batches to simulate realistic traffic
-            time.sleep(random.uniform(0.3, 1.2))
+            # Random delay between batches to simulate realistic traffic,
+            # scaled dynamically by the live config from the Controller.
+            base_delay = random.uniform(0.3, 1.2)
+            time.sleep(base_delay / config_state.speed_multiplier)
     except KeyboardInterrupt:
         print("Stopping producer...")
     finally:
