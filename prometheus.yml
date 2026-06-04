@@ -17,13 +17,18 @@ scrape_configs:
   # shared fraud-detection-net network.
 
   - job_name: "producer"
-    static_configs:
-      - targets: ["producer:8000"]
+    dns_sd_configs:
+      - names:
+          - "producer"
+        type: "A"
+        port: 8000
 
   - job_name: "fraud-detector"
-    static_configs:
-      - targets: ["fraud-detector:8002"]
-
+    dns_sd_configs:
+      - names:
+          - "fraud-detector"
+        type: "A"
+        port: 8002
 
   # --- Redis metrics via redis-exporter sidecar ---
   # The redis-exporter container translates Redis INFO data into Prometheus format.
