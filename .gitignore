@@ -15,6 +15,15 @@ dashboard_api/.vscode/
 !dashboard_api/**/src/main/**/build/
 !dashboard_api/**/src/test/**/build/
 
+# cluster_controller
+cluster_controller/HELP.md
+cluster_controller/.gradle/
+cluster_controller/build/
+cluster_controller/.vscode/
+!cluster_controller/gradle/wrapper/gradle-wrapper.jar
+!cluster_controller/**/src/main/**/build/
+!cluster_controller/**/src/test/**/build/
+
 
 # IDE and Project specific
 .apt_generated
