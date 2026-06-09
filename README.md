@@ -15,6 +15,9 @@ This project utilizes a **Polyglot Microservices** architecture to separate the 
 
 For an extensive deep dive into *why* these specific technologies were chosen, please read the [Architecture Decision Record (ADR)](ARCHITECTURE_DECISIONS.md).
 
+For detailed technical documentation on every service and component, see the [📖 `/documentation` directory](documentation/README.md).
+
+
 ## 📋 Prerequisites
 
 To run the entire pipeline locally, you only need:

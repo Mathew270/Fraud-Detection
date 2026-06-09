@@ -125,3 +125,14 @@ Instead of a single server trying to do everything, the workload is distributed 
 **The Decision:** Adopt a "Share-Nothing" architecture at the application level, delegating all state synchronization to Redis and Kafka.
 
 **Justification:** Traditional multi-threading requires complex Mutex locks and semaphores to prevent data corruption in shared RAM. In a distributed system, this doesn't work across multiple servers. By moving all state to Redis (which is atomic) and using Kafka for ordering, we eliminated the need for any local locks or complex threading logic. This makes the system "Horizontally Scalable" by design—we can add 100 more workers without any risk of race conditions.
+
+---
+
+### Decision 14: DNS Service Discovery vs. Static Configuration (The Counter Reset Phenomenon)
+**Context:** When scaling microservice replicas (such as the Python `producer` or `fraud-detector` workers) in a Docker Compose network, Prometheus initially relied on `static_configs` targeting `producer:8000`. This introduced a hidden observability anomaly: Docker's internal DNS load balancer round-robinned the scrape requests, serving a different replica IP on each cycle. The PromQL `rate()` function interpreted the wildly fluctuating counter values between scrapes as application crashes/restarts, mathematically stitching the deltas together to produce an artificial, misleading throughput spike.
+
+**The Decision:** Transition the Prometheus scraping protocol for horizontally scaled services from `static_configs` to **DNS Service Discovery (`dns_sd_configs`)** querying "A" records.
+
+**Justification:** 
+- **True Observability:** Relying on static DNS round-robin scraping creates "blind spots," as only one random replica is monitored at any given scrape interval. 
+- **Math Parity:** DNS service discovery dynamically queries the internal Docker DNS server to extract the unique IP addresses of *all* active container replicas, instructing Prometheus to spawn dedicated, concurrent scrape targets for each container. This completely eliminates the PromQL "Counter Reset" illusion and provides true, granular metrics reporting across the entire horizontally scaled cluster.
