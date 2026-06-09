@@ -23,6 +23,7 @@
 #
 # Port map:
 #   Host-exposed (browser access):
+#     6379:6379  — Redis data (exposed for local Java dev)
 #     8001:8001  — RedisInsight UI (built into redis-stack)
 #     8080:8080  — Kafka UI
 #     8081:8081  — Redis Commander UI
@@ -33,7 +34,6 @@
 #   Internal only (Docker network, not exposed to host):
 #     9092  — Kafka PLAINTEXT listener (container-to-container)
 #     9093  — Kafka CONTROLLER listener (KRaft internal)
-#     6379  — Redis data
 #     8000  — Producer Prometheus metrics
 #     8002  — Fraud detector Prometheus metrics
 #     9121  — Redis exporter Prometheus metrics
@@ -80,6 +80,7 @@ services:
     expose:
       - "6379"                          # Redis protocol (container-to-container)
     ports:
+      - "6379:6379"                     # Exposed to host for local Java dev
       - "8001:8001"                     # RedisInsight web UI
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -124,7 +125,6 @@ services:
   # ---------------------------------------------------------------------------
   producer:
     build: ./workers
-    container_name: producer
     command: ["python", "-u", "producer.py"]    # -u: unbuffered stdout for logs
     expose:
       - "8000"                          # Prometheus metrics (scraped over Docker network)
@@ -143,7 +143,6 @@ services:
   # ---------------------------------------------------------------------------
   fraud-detector:
     build: ./workers
-    container_name: fraud-detector
     command: ["python", "-u", "fraud_detector.py"]
     expose:
       - "8002"                          # Prometheus metrics (scraped over Docker network)
