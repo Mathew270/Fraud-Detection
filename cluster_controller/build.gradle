@@ -158,3 +158,9 @@ tasks.named('test') {
 		exceptionFormat = "full"
 	}
 }
+
+tasks.named('bootRun') {
+	// Automatically inject the correct Docker Compose directory path when running locally
+	environment "COMPOSE_PROJECT_DIR", project.projectDir.parentFile.absolutePath
+	environment "REDIS_HOST", "localhost"
+}
