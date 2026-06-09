@@ -1,6 +1,6 @@
 # Dashboard API: Service Documentation
 
-The `dashboard_api` is a **Java 17 Spring Boot** microservice that acts as the reactive bridge between the Kafka event stream and the browser. It consumes messages from two Kafka topics and forwards them to connected browser clients in real time using **Server-Sent Events (SSE)**.
+The `sse_stream` is a **Java 17 Spring Boot** microservice that acts as the reactive bridge between the Kafka event stream and the browser. It consumes messages from two Kafka topics and forwards them to connected browser clients in real time using **Server-Sent Events (SSE)**.
 
 ---
 
@@ -27,7 +27,7 @@ flowchart LR
     SSEAlerts --> Browser
 ```
 
-This service solves a fundamental protocol incompatibility: browsers speak HTTP (or WebSocket), but Kafka speaks a custom binary TCP protocol. The `dashboard_api` is the translator that sits in between.
+This service solves a fundamental protocol incompatibility: browsers speak HTTP (or WebSocket), but Kafka speaks a custom binary TCP protocol. The `sse_stream` is the translator that sits in between.
 
 ---
 
@@ -43,9 +43,9 @@ WebFlux uses a small, fixed thread pool (typically 1 thread per CPU core) with a
 
 ## Class-by-Class Breakdown
 
-### `DashboardApiApplication.java` — Entry Point
+### `SseStreamApplication.java` — Entry Point
 
-Boots the Spring Boot application. On startup, Spring auto-detects all `@Configuration`, `@Service`, and `@RestController` beans in the `com.frauddetection.dashboard_api` package and wires them together. The embedded Netty server (WebFlux's default) starts on port `8085`.
+Boots the Spring Boot application. On startup, Spring auto-detects all `@Configuration`, `@Service`, and `@RestController` beans in the `com.frauddetection.sse_stream` package and wires them together. The embedded Netty server (WebFlux's default) starts on port `8085`.
 
 ---
 
@@ -196,7 +196,7 @@ Maps the alert JSON published by `fraud_detector.py` to the `fraud-alerts` Kafka
 
 ## Containerisation
 
-The `dashboard_api` uses a **multi-stage Docker build** for a minimal, secure production image:
+The `sse_stream` uses a **multi-stage Docker build** for a minimal, secure production image:
 
 **Stage 1 — Builder (`eclipse-temurin:17-jdk`):**
 - Downloads Gradle dependencies (separate layer, cached unless `build.gradle` changes)
@@ -226,12 +226,12 @@ The `dashboard_api` uses a **multi-stage Docker build** for a minimal, secure pr
 
 ## Running Locally (Outside Docker)
 
-The `dashboard_api` can run on your host machine against the Dockerized Kafka:
+The `sse_stream` can run on your host machine against the Dockerized Kafka:
 
 ```bash
 # Set env vars so the app connects to the host-exposed Kafka port
 export KAFKA_BOOTSTRAP_SERVERS=localhost:9094
-cd dashboard_api
+cd sse_stream
 ./gradlew bootRun
 ```
 

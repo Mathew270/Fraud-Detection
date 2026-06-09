@@ -14,7 +14,7 @@
 #   Application:
 #     producer         — Simulated transaction generator (Python)
 #     fraud-detector   — Fraud evaluation engine (Python)
-#     dashboard-api    — Spring Boot SSE proxy for the React UI (Java)
+#     sse-stream    — Spring Boot SSE proxy for the React UI (Java)
 #
 #   Monitoring:
 #     prometheus       — Metrics collection (scrapes /metrics endpoints)
@@ -158,9 +158,9 @@ services:
   # streams events to the React UI via Server-Sent Events (SSE).
   # Replaces alert-consumer.py — the dashboard now handles alert display.
   # ---------------------------------------------------------------------------
-  dashboard-api:
-    build: ./dashboard_api
-    container_name: dashboard-api
+  sse-stream:
+    build: ./sse_stream
+    container_name: sse-stream
     ports:
       - "8085:8085"                     # Dashboard API (exposed to host for browser access)
     depends_on:

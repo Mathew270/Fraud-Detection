@@ -90,7 +90,7 @@ Instead of a single server trying to do everything, the workload is distributed 
 ### Decision 10: Reactive SSE Proxy (Project Reactor)
 **Context:** Delivering real-time Kafka events to a web browser requires a bridge that can handle high-frequency updates without blocking the server.
 
-**The Decision:** Implement the `dashboard-api` using **Spring WebFlux** and **Project Reactor Sinks**.
+**The Decision:** Implement the `sse-stream` using **Spring WebFlux** and **Project Reactor Sinks**.
 
 **Justification:** 
 - **Efficiency:** Unlike traditional REST which is "pull-based," Server-Sent Events (SSE) allows the server to "push" data. 

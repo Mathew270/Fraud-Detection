@@ -11,7 +11,7 @@ For a quick-start guide and project overview, see the [main README](../README.md
 | Document | What it covers |
 | :--- | :--- |
 | [workers.md](./workers.md) | Python data-plane: `producer.py`, `fraud_detector.py`, `alert_consumer.py`, `redis_listener.py`, `transaction_generator.py`, `config.py` |
-| [dashboard_api.md](./dashboard_api.md) | Java Spring WebFlux SSE proxy: Kafka consumers, Reactor Sinks, SSE endpoints, data models |
+| [sse_stream.md](./sse_stream.md) | Java Spring WebFlux SSE proxy: Kafka consumers, Reactor Sinks, SSE endpoints, data models |
 | [cluster_controller.md](./cluster_controller.md) | Java gRPC control plane: component roles, Strategy Pattern, DooD containerisation, Kubernetes migration strategy |
 | [monitoring.md](./monitoring.md) | Prometheus scrape config, DNS service discovery, Grafana provisioning, available metrics |
 | [infrastructure.md](./infrastructure.md) | Docker Compose topology, Kafka KRaft setup, Redis roles, networking, port reference |
@@ -29,7 +29,7 @@ flowchart TD
     FraudDet["fraud_detector.py × N replicas"]
     Redis["Redis\nuser:last_txn:{id}\nuser:txn_times:{id}"]
     KafkaAlerts["Kafka: 'fraud-alerts' topic"]
-    DashAPI["dashboard_api (Java)\nSSE streams"]
+    DashAPI["sse_stream (Java)\nSSE streams"]
     AlertConsumer["alert_consumer.py\n(legacy stdout)"]
     Browser["Browser\nGET /api/stream/transactions\nGET /api/stream/alerts"]
     ClusterCtrl["cluster_controller (Java gRPC)\nPort 9095"]

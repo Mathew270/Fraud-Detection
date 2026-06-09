@@ -25,7 +25,7 @@ All services communicate over a single Docker-managed network: `fraud-detection-
 | `redis-commander` | `rediscommander/redis-commander:latest` | `8081` | `8081` | Redis browser UI |
 | `producer` | `./workers` (Python) | `8000` | — | Transaction generator |
 | `fraud-detector` | `./workers` (Python) | `8002` | — | Fraud detection engine |
-| `dashboard-api` | `./dashboard_api` (Java) | `8085` | `8085` | SSE streaming API |
+| `sse-stream` | `./sse_stream` (Java) | `8085` | `8085` | SSE streaming API |
 | `prometheus` | `prom/prometheus:latest` | `9090` | `9090` | Metrics collection |
 | `grafana` | `grafana/grafana:latest` | `3000` | `3000` | Metrics visualisation |
 | `redis-exporter` | `oliver006/redis_exporter:latest` | `9121` | — | Redis → Prometheus bridge |
@@ -74,8 +74,8 @@ The `ADVERTISED_LISTENERS` are what Kafka tells clients to connect to after init
 
 | Topic | Partitions | Replication Factor | Producers | Consumers |
 | :--- | :--- | :--- | :--- | :--- |
-| `transactions` | 3 | 1 | `producer.py` | `fraud_detector.py`, `dashboard_api` |
-| `fraud-alerts` | 3 | 1 | `fraud_detector.py` | `dashboard_api`, `alert_consumer.py` |
+| `transactions` | 3 | 1 | `producer.py` | `fraud_detector.py`, `sse_stream` |
+| `fraud-alerts` | 3 | 1 | `fraud_detector.py` | `sse_stream`, `alert_consumer.py` |
 
 **Why 3 partitions?**
 Each partition can be consumed by one consumer replica within a consumer group. With 3 partitions, scaling to 3 fraud-detector replicas gives each replica its own dedicated partition — perfect parallelism.
@@ -177,7 +177,7 @@ flowchart TD
     Redis["redis\n(health: redis-cli ping)"]
     FraudDet["fraud-detector\n(waits: kafka healthy, redis healthy)"]
     Producer["producer\n(waits: fraud-detector started, kafka healthy, redis healthy)"]
-    DashApi["dashboard-api\n(waits: kafka healthy)"]
+    DashApi["sse-stream\n(waits: kafka healthy)"]
     KafkaUI["kafka-ui\n(waits: kafka healthy)"]
     RedisCmd["redis-commander\n(waits: redis healthy)"]
     RedisExp["redis-exporter\n(waits: redis healthy)"]
@@ -228,8 +228,8 @@ Infrastructure services (`kafka`, `redis`, `prometheus`, `grafana`, etc.) do hav
 
 | URL | Service | Purpose |
 | :--- | :--- | :--- |
-| `http://localhost:8085/api/stream/transactions` | dashboard-api | Live SSE transaction stream |
-| `http://localhost:8085/api/stream/alerts` | dashboard-api | Live SSE fraud alert stream |
+| `http://localhost:8085/api/stream/transactions` | sse-stream | Live SSE transaction stream |
+| `http://localhost:8085/api/stream/alerts` | sse-stream | Live SSE fraud alert stream |
 | `http://localhost:8080` | kafka-ui | Kafka topic browser |
 | `http://localhost:8081` | redis-commander | Redis key browser |
 | `http://localhost:8001` | redis (RedisInsight) | Visual Redis client |
@@ -240,7 +240,7 @@ Infrastructure services (`kafka`, `redis`, `prometheus`, `grafana`, etc.) do hav
 
 | Address | Service | Used by |
 | :--- | :--- | :--- |
-| `kafka:9092` | Kafka PLAINTEXT | All Python workers, dashboard-api |
+| `kafka:9092` | Kafka PLAINTEXT | All Python workers, sse-stream |
 | `kafka:9093` | Kafka CONTROLLER | Kafka internal (KRaft) |
 | `redis:6379` | Redis | fraud-detector, redis-listener, redis-exporter |
 | `producer:8000` | Producer metrics | Prometheus |

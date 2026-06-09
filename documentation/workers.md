@@ -248,7 +248,7 @@ Severity is `"high"` if `huge_amount` is one of the reasons, `"medium"` otherwis
 
 ## Service: `alert_consumer.py` — Alert Display Service (Legacy)
 
-**Role:** A simple Kafka consumer that subscribes to the `fraud-alerts` topic and logs each alert to stdout in a human-readable format. Originally the terminal-based alert display layer; now mostly superseded by the `dashboard_api` SSE stream but kept in the codebase for standalone debugging.
+**Role:** A simple Kafka consumer that subscribes to the `fraud-alerts` topic and logs each alert to stdout in a human-readable format. Originally the terminal-based alert display layer; now mostly superseded by the `sse_stream` SSE stream but kept in the codebase for standalone debugging.
 
 **Kafka Consumer Group:** `alert-service-group`
 - Independent from `fraud-detector-group` — Kafka delivers every alert to both groups independently.
@@ -259,7 +259,7 @@ Severity is `"high"` if `huge_amount` is one of the reasons, `"medium"` otherwis
 | :--- | :--- | :--- | :--- |
 | `alert_consumer_alerts_received_total` | Counter | `severity=high\|medium` | Total alerts received, split by severity |
 
-> **Note:** In the current architecture, `alert_consumer.py` is NOT started by `docker-compose.yml` (it has been replaced by the Java `dashboard_api`). It can be run locally for debugging without Docker by setting `KAFKA_BOOTSTRAP_SERVERS=localhost:9094`.
+> **Note:** In the current architecture, `alert_consumer.py` is NOT started by `docker-compose.yml` (it has been replaced by the Java `sse_stream`). It can be run locally for debugging without Docker by setting `KAFKA_BOOTSTRAP_SERVERS=localhost:9094`.
 
 ---
 
@@ -300,7 +300,7 @@ flowchart TD
     Redis["Redis\nuser state: last txn, sliding window"]
     KafkaAlerts["Kafka: 'fraud-alerts' topic"]
     AlertConsumer["alert_consumer.py\n(legacy — stdout)"]  
-    DashboardAPI["dashboard_api\n(Java SSE → browser)"]
+    SseStream["sse_stream\n(Java SSE → browser)"]
 
     TxGen -->|generate_transaction| Producer
     Producer -->|Kafka PRODUCE| KafkaTx
@@ -308,5 +308,5 @@ flowchart TD
     Redis <-->|state read/write| FraudDetector
     FraudDetector -->|if fraud: Kafka PRODUCE| KafkaAlerts
     KafkaAlerts --> AlertConsumer
-    KafkaAlerts --> DashboardAPI
+    KafkaAlerts --> SseStream
 ```

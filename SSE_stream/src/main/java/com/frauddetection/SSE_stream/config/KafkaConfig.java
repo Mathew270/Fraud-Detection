@@ -1,4 +1,4 @@
-package com.frauddetection.dashboard_api.config;
+package com.frauddetection.sse_stream.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -23,11 +23,11 @@ import java.util.Map;
  * explicitly here.
  *
  * This factory controls how {@code @KafkaListener} methods in
- * {@link com.frauddetection.dashboard_api.service.KafkaConsumerService}
+ * {@link com.frauddetection.sse_stream.service.KafkaConsumerService}
  * are connected to the Kafka broker. All consumer properties are read
  * from {@code application.yml} via {@code @Value} injection.
  *
- * @see com.frauddetection.dashboard_api.service.KafkaConsumerService
+ * @see com.frauddetection.sse_stream.service.KafkaConsumerService
  */
 @Configuration
 public class KafkaConfig {

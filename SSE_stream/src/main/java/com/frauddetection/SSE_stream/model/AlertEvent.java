@@ -1,4 +1,4 @@
-package com.frauddetection.dashboard_api.model;
+package com.frauddetection.sse_stream.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

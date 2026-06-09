@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Main-Class: org.springframework.boot.loader.launch.JarLauncher
-Start-Class: com.frauddetection.dashboard_api.DashboardApiApplication
-Spring-Boot-Version: 4.0.5
+Start-Class: com.frauddetection.sse_stream.SseStreamApplication
+Spring-Boot-Version: 4.0.6
 Spring-Boot-Classes: BOOT-INF/classes/
 Spring-Boot-Lib: BOOT-INF/lib/
 Spring-Boot-Classpath-Index: BOOT-INF/classpath.idx
 Spring-Boot-Layers-Index: BOOT-INF/layers.idx
 Build-Jdk-Spec: 17
-Implementation-Title: dashboard_api
+Implementation-Title: sse_stream
 Implementation-Version: 0.0.1-SNAPSHOT
 

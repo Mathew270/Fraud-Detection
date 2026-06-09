@@ -1,8 +1,8 @@
-package com.frauddetection.dashboard_api.controller;
+package com.frauddetection.sse_stream.controller;
 
-import com.frauddetection.dashboard_api.model.AlertEvent;
-import com.frauddetection.dashboard_api.model.TransactionEvent;
-import com.frauddetection.dashboard_api.service.KafkaConsumerService;
+import com.frauddetection.sse_stream.model.AlertEvent;
+import com.frauddetection.sse_stream.model.TransactionEvent;
+import com.frauddetection.sse_stream.service.KafkaConsumerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -29,10 +29,10 @@ import reactor.core.publisher.Flux;
  *   Python Producer → Kafka → KafkaConsumerService → Reactor Sink → SseController → Browser
  * </pre>
  *
- * @see com.frauddetection.dashboard_api.service.KafkaConsumerService
+ * @see com.frauddetection.sse_stream.service.KafkaConsumerService
  */
 @RestController
-@RequestMapping("/api/stream")
+@RequestMapping("/api/sse")
 @CrossOrigin(origins = "*") // TODO: Restrict to frontend origin in production
 public class SseController {
 
@@ -58,7 +58,7 @@ public class SseController {
      */
     @GetMapping(value = "/transactions", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<TransactionEvent> streamTransactions() {
-        logger.info("SSE subscriber connected: /api/stream/transactions");
+        logger.info("SSE subscriber connected: /api/sse/transactions");
 
         return kafkaConsumerService.getTransactionStream()
                 .onBackpressureDrop(dropped ->
@@ -76,7 +76,7 @@ public class SseController {
      */
     @GetMapping(value = "/alerts", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<AlertEvent> streamAlerts() {
-        logger.info("SSE subscriber connected: /api/stream/alerts");
+        logger.info("SSE subscriber connected: /api/sse/alerts");
 
         return kafkaConsumerService.getAlertStream();
     }

@@ -10,7 +10,7 @@ This project utilizes a **Polyglot Microservices** architecture to separate the 
 - **Inference & Detection (Python):** Stateless consumer nodes that evaluate transactions against Redis-backed business rules (impossible travel, burst frequency).
 - **Message Broker (Apache Kafka):** The distributed event bus that decouples producers from processors.
 - **State Management (Redis):** High-speed, centralized store tracking user sliding windows across isolated detector nodes.
-- **The Control Plane (Java Spring Boot):** A reactive backend in the `/dashboard_api` directory using Spring WebFlux to stream real-time Kafka events to the frontend via Server-Sent Events (SSE).
+- **The Control Plane (Java Spring Boot):** A reactive backend in the `/sse_stream` directory using Spring WebFlux to stream real-time Kafka events to the frontend via Server-Sent Events (SSE).
 - **Monitoring (Prometheus & Grafana):** Automated metrics collection and visualization for end-to-end throughput observability.
 
 For an extensive deep dive into *why* these specific technologies were chosen, please read the [Architecture Decision Record (ADR)](ARCHITECTURE_DECISIONS.md).

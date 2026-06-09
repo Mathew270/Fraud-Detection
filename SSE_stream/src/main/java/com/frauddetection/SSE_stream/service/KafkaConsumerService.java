@@ -1,8 +1,8 @@
-package com.frauddetection.dashboard_api.service;
+package com.frauddetection.sse_stream.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.frauddetection.dashboard_api.model.AlertEvent;
-import com.frauddetection.dashboard_api.model.TransactionEvent;
+import com.frauddetection.sse_stream.model.AlertEvent;
+import com.frauddetection.sse_stream.model.TransactionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -15,7 +15,7 @@ import reactor.core.publisher.Sinks;
  *
  * Listens to the {@code transactions} and {@code fraud-alerts} Kafka topics
  * and multicasts received events into Project Reactor {@link Sinks}. The
- * {@link com.frauddetection.dashboard_api.controller.SseController} exposes
+ * {@link com.frauddetection.sse_stream.controller.SseController} exposes
  * these sinks as SSE endpoints, enabling real-time browser streaming.
  *
  * <p><strong>Sink configuration:</strong>
@@ -32,8 +32,8 @@ import reactor.core.publisher.Sinks;
  * and {@link AlertEvent}). A single Kafka {@code JsonDeserializer} cannot
  * handle multiple target types on different topics.
  *
- * @see com.frauddetection.dashboard_api.config.KafkaConfig
- * @see com.frauddetection.dashboard_api.controller.SseController
+ * @see com.frauddetection.sse_stream.config.KafkaConfig
+ * @see com.frauddetection.sse_stream.controller.SseController
  */
 @Service
 public class KafkaConsumerService {

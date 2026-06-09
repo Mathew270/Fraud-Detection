@@ -12,7 +12,7 @@ server:
 
 spring:
   application:
-    name: dashboard-api
+    name: sse-stream
 
   kafka:
     # Kafka broker address inside the Docker network.
@@ -38,5 +38,5 @@ spring:
 # --- Logging ---
 logging:
   level:
-    com.frauddetection.dashboard_api: DEBUG
+    com.frauddetection.sse_stream: DEBUG
     org.springframework.kafka: INFO
