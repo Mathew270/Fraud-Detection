@@ -1,0 +1,42 @@
+# =============================================================================
+# application.yml — Central configuration for the Dashboard API.
+#
+# Configures the embedded web server port, Kafka consumer connection,
+# and logging levels. Environment variables can override any value at
+# runtime (e.g. KAFKA_BOOTSTRAP_SERVERS in Docker or Kubernetes).
+# =============================================================================
+
+server:
+  # Port 8085 avoids conflict with Kafka UI (port 8080) in docker-compose.
+  port: 8085
+
+spring:
+  application:
+    name: sse-stream
+
+  kafka:
+    # Kafka broker address inside the Docker network.
+    # All services communicate via the PLAINTEXT listener on kafka:9092.
+    # Override with KAFKA_BOOTSTRAP_SERVERS env var for other environments.
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+
+    consumer:
+      # Dedicated consumer group for the dashboard API. Must be different
+      # from the Python workers' group (fraud-detector-group) so both
+      # receive independent copies of every message.
+      group-id: fraud-dashboard-group
+
+      # 'latest' — only stream events produced after the dashboard connects.
+      # Historical data is not replayed on startup.
+      auto-offset-reset: latest
+
+      # Messages are consumed as raw UTF-8 strings. JSON-to-POJO conversion
+      # happens in KafkaConsumerService using Jackson ObjectMapper.
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+# --- Logging ---
+logging:
+  level:
+    com.frauddetection.sse_stream: DEBUG
+    org.springframework.kafka: INFO

@@ -31,7 +31,7 @@ flowchart TD
     KafkaAlerts["Kafka: 'fraud-alerts' topic"]
     DashAPI["sse_stream (Java)\nSSE streams"]
     AlertConsumer["alert_consumer.py\n(legacy stdout)"]
-    Browser["Browser\nGET /api/stream/transactions\nGET /api/stream/alerts"]
+    Browser["Browser\nGET /api/sse/transactions\nGET /api/sse/alerts"]
     ClusterCtrl["cluster_controller (Java gRPC)\nPort 9095"]
     RedisPubSub["Redis Pub/Sub\n'simulation-config' channel"]
     RedisListener["redis_listener.py\nin each producer"]

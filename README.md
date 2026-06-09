@@ -35,13 +35,13 @@ The entire pipeline—including the infrastructure, workers, and the API—is fu
    ```
 3. **Verify the Stream**
    Once the containers are healthy, you can view the live SSE stream directly in your browser:
-   - Transactions: [http://localhost:8085/api/stream/transactions](http://localhost:8085/api/stream/transactions)
-   - Fraud Alerts: [http://localhost:8085/api/stream/alerts](http://localhost:8085/api/stream/alerts)
+   - Transactions: [http://localhost:8085/api/sse/transactions](http://localhost:8085/api/sse/transactions)
+   - Fraud Alerts: [http://localhost:8085/api/sse/alerts](http://localhost:8085/api/sse/alerts)
 
 ## 📊 Observability & Debugging
 
 Monitor the health and data flow using these local web UIs:
-- **Dashboard API (SSE):** [http://localhost:8085](http://localhost:8085)
+- **SSE Stream (SSE):** [http://localhost:8085](http://localhost:8085)
 - **Kafka UI:** [http://localhost:8080](http://localhost:8080)
 - **Redis Insight:** [http://localhost:8001](http://localhost:8001)
 - **Prometheus:** [http://localhost:9090](http://localhost:9090)

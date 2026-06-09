@@ -228,8 +228,8 @@ Infrastructure services (`kafka`, `redis`, `prometheus`, `grafana`, etc.) do hav
 
 | URL | Service | Purpose |
 | :--- | :--- | :--- |
-| `http://localhost:8085/api/stream/transactions` | sse-stream | Live SSE transaction stream |
-| `http://localhost:8085/api/stream/alerts` | sse-stream | Live SSE fraud alert stream |
+| `http://localhost:8085/api/sse/transactions` | sse-stream | Live SSE transaction stream |
+| `http://localhost:8085/api/sse/alerts` | sse-stream | Live SSE fraud alert stream |
 | `http://localhost:8080` | kafka-ui | Kafka topic browser |
 | `http://localhost:8081` | redis-commander | Redis key browser |
 | `http://localhost:8001` | redis (RedisInsight) | Visual Redis client |
