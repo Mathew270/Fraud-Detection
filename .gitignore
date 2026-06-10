@@ -1,10 +1,14 @@
-﻿__pycache__/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
 .env
 app/.venv/
 .pytest_cache/
+
+# frontend (React + Vite)
+frontend/node_modules/
+frontend/dist/
 
 # SSE_stream
 SSE_stream/HELP.md

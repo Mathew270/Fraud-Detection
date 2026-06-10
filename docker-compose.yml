@@ -154,18 +154,32 @@ services:
     restart: on-failure
 
   # ---------------------------------------------------------------------------
-  # Dashboard API — Spring Boot backend that consumes Kafka topics and
+  # SSE Stream — Spring Boot backend that consumes Kafka topics and
   # streams events to the React UI via Server-Sent Events (SSE).
   # Replaces alert-consumer.py — the dashboard now handles alert display.
   # ---------------------------------------------------------------------------
   sse-stream:
-    build: ./sse_stream
+    build: ./SSE_stream
     container_name: sse-stream
     ports:
-      - "8085:8085"                     # Dashboard API (exposed to host for browser access)
+      - "8085:8085"                     # SSE API (exposed to host for browser access)
     depends_on:
       kafka:
         condition: service_healthy
+    restart: on-failure
+
+  # ---------------------------------------------------------------------------
+  # Dashboard UI — React frontend served by nginx.
+  # Connects to the SSE stream backend to display live transactions and
+  # fraud alerts. Nginx proxies /api/* requests to the sse-stream container.
+  # ---------------------------------------------------------------------------
+  dashboard-ui:
+    build: ./frontend
+    container_name: dashboard-ui
+    ports:
+      - "3001:80"                       # Dashboard UI (nginx on port 80 → host port 3001)
+    depends_on:
+      - sse-stream
     restart: on-failure
 
   # ---------------------------------------------------------------------------
