@@ -10,14 +10,14 @@ app/.venv/
 frontend/node_modules/
 frontend/dist/
 
-# SSE_stream
-SSE_stream/HELP.md
-SSE_stream/.gradle/
-SSE_stream/build/
-SSE_stream/.vscode/
-!SSE_stream/gradle/wrapper/gradle-wrapper.jar
-!SSE_stream/**/src/main/**/build/
-!SSE_stream/**/src/test/**/build/
+# sse_stream
+sse_stream/HELP.md
+sse_stream/.gradle/
+sse_stream/build/
+sse_stream/.vscode/
+!sse_stream/gradle/wrapper/gradle-wrapper.jar
+!sse_stream/**/src/main/**/build/
+!sse_stream/**/src/test/**/build/
 
 # cluster_controller
 cluster_controller/HELP.md
