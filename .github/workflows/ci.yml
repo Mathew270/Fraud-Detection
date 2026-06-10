@@ -4,7 +4,7 @@
 # Triggers on every push and pull request to main. Runs:
 #   1. Python tests       — pytest unit & integration tests (workers/)
 #   2. Python syntax check — ensures all worker modules load without errors
-#   3. Java tests          — Gradle build + JUnit tests (dashboard_api/)
+#   3. Java tests          — Gradle build + JUnit tests (sse_stream/)
 #   4. Docker builds       — verifies both worker and API images build
 #   5. Compose validation  — checks docker-compose.yml is well-formed
 # =============================================================================
@@ -77,7 +77,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build and test
-        working-directory: dashboard_api
+        working-directory: sse_stream
         run: ./gradlew build
 
   # ---------------------------------------------------------------------------
@@ -92,8 +92,8 @@ jobs:
       - name: Build workers image
         run: docker build -t fraud-detection-workers ./workers
 
-      - name: Build dashboard-api image
-        run: docker build -t fraud-detection-dashboard-api ./dashboard_api
+      - name: Build sse-stream image
+        run: docker build -t fraud-detection-sse-stream ./sse_stream
 
   # ---------------------------------------------------------------------------
   # Compose Validation — ensure docker-compose.yml is well-formed
