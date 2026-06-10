@@ -1,0 +1,895 @@
+/* =============================================================================
+ * index.css — Design System for the Fraud Detection Dashboard.
+ *
+ * DESIGN PHILOSOPHY:
+ *   Dark-mode-first with a deep navy palette, glassmorphism panels,
+ *   and vibrant accent colors. The goal is a "mission control" aesthetic
+ *   that conveys both professionalism and urgency.
+ *
+ * COLOR PALETTE:
+ *   Background:  #0a0e1a (deepest), #111827 (panels), #1f2937 (elevated)
+ *   Primary:     #3b82f6 (electric blue — interactive elements)
+ *   Success:     #10b981 (emerald — healthy states, low amounts)
+ *   Warning:     #f59e0b (amber — medium severity, attention needed)
+ *   Danger:      #ef4444 (red — high severity, critical alerts)
+ *   Text:        #f9fafb (primary), #9ca3af (secondary), #6b7280 (muted)
+ *
+ * TYPOGRAPHY:
+ *   Google Font "Inter" — clean, modern, excellent legibility at small sizes.
+ *   Loaded via @import in this file.
+ *
+ * LAYOUT:
+ *   CSS Grid-based layout. The main dashboard uses a 3:2 ratio grid
+ *   (transactions panel wider than alerts panel) because transactions
+ *   have more columns and need more horizontal space.
+ *
+ * ANIMATIONS:
+ *   - fade-in:   New table rows / alert cards slide in from above
+ *   - pulse:     Connection status dot pulses when connected
+ *   - glow:      High-severity alert borders glow red
+ * ============================================================================= */
+
+/* --- Google Font --- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+/* =============================================================================
+ * CSS CUSTOM PROPERTIES (Design Tokens)
+ *
+ * All colors, spacing, and sizing are defined here as CSS variables.
+ * This makes it trivial to adjust the entire theme from one place.
+ * Components reference these variables instead of hard-coding values.
+ * ============================================================================= */
+:root {
+  /* --- Color Palette --- */
+  --bg-deepest: #0a0e1a;
+  --bg-primary: #111827;
+  --bg-elevated: #1f2937;
+  --bg-hover: #374151;
+
+  --accent-blue: #3b82f6;
+  --accent-blue-dim: #2563eb;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-red-dim: #dc2626;
+
+  --text-primary: #f9fafb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-medium: rgba(255, 255, 255, 0.1);
+
+  /* --- Glass Effect --- */
+  --glass-bg: rgba(17, 24, 39, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 12px;
+
+  /* --- Spacing --- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* --- Border Radius --- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* --- Shadows --- */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+
+  /* --- Transitions --- */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+}
+
+/* =============================================================================
+ * RESET & BASE STYLES
+ * ============================================================================= */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background-color: var(--bg-deepest);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle background gradient for depth */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+      ellipse at 20% 50%,
+      rgba(59, 130, 246, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(16, 185, 129, 0.03) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* =============================================================================
+ * APP LAYOUT
+ * ============================================================================= */
+.app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--space-lg);
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* =============================================================================
+ * NAVBAR
+ *
+ * Fixed at the top with a frosted glass effect. The blur ensures
+ * content scrolling behind it creates a premium translucent look.
+ * ============================================================================= */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-emerald));
+  border-radius: var(--radius-md);
+  color: white;
+}
+
+.navbar-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.navbar-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  display: block;
+  margin-top: 1px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* --- Connection Status Indicator --- */
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px 14px;
+  background: var(--bg-elevated);
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background-color var(--transition-normal);
+}
+
+/* Green pulsing dot when connected */
+.status-dot.connected {
+  background-color: var(--accent-emerald);
+  box-shadow: 0 0 8px var(--accent-emerald);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Red static dot when disconnected */
+.status-dot.disconnected {
+  background-color: var(--accent-red);
+  box-shadow: 0 0 8px var(--accent-red);
+}
+
+/* Amber blinking dot when reconnecting */
+.status-dot.reconnecting {
+  background-color: var(--accent-amber);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.status-text {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* --- Clock --- */
+.navbar-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.clock-time {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.clock-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+/* =============================================================================
+ * STATS BAR
+ *
+ * Horizontal row of four KPI cards. Uses CSS Grid for equal distribution.
+ * Each card has a left-side icon and a right-side value + label.
+ * ============================================================================= */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-medium);
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.stat-icon-tps {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent-blue);
+}
+
+.stat-icon-transactions {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-emerald);
+}
+
+.stat-icon-alerts {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+}
+
+.stat-icon-rate {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* =============================================================================
+ * PANEL (Shared base for TransactionFeed, AlertPanel, ClusterControls)
+ *
+ * All major content sections share this glass-panel base style.
+ * Specific panels add their own overrides below.
+ * ============================================================================= */
+.panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.panel-badge {
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 3px 10px;
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent-blue);
+  border-radius: 12px;
+}
+
+.panel-badge-alert {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+}
+
+.panel-badge-disabled {
+  background: rgba(107, 114, 128, 0.15);
+  color: var(--text-muted);
+}
+
+/* =============================================================================
+ * DASHBOARD GRID
+ *
+ * Two-column layout: transactions (wider) on the left, alerts on the right.
+ * The 3:2 ratio gives the transaction table enough room for its columns
+ * while keeping alerts visually prominent.
+ * ============================================================================= */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+/* =============================================================================
+ * TRANSACTION FEED TABLE
+ * ============================================================================= */
+.transaction-panel {
+  min-height: 500px;
+}
+
+.table-container {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 520px;
+}
+
+/* Custom scrollbar for the transaction table */
+.table-container::-webkit-scrollbar {
+  width: 6px;
+}
+.table-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--bg-hover);
+  border-radius: 3px;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.transaction-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.transaction-table th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.transaction-table td {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.82rem;
+  border-bottom: 1px solid var(--border-subtle);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Zebra striping for readability */
+.tx-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tx-row:hover {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.tx-time {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+}
+
+.tx-user {
+  color: var(--accent-blue);
+  font-weight: 500;
+}
+
+/* Amount color coding */
+.tx-amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.amount-low {
+  color: var(--accent-emerald);
+}
+
+.amount-medium {
+  color: var(--accent-amber);
+}
+
+.amount-high {
+  color: var(--accent-red);
+}
+
+/* Merchant category badge */
+.category-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  background: var(--bg-elevated);
+  border-radius: 4px;
+  color: var(--text-secondary);
+}
+
+.tx-location {
+  font-size: 0.8rem;
+}
+
+.tx-method {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+}
+
+/* =============================================================================
+ * ALERT PANEL
+ * ============================================================================= */
+.alert-panel {
+  min-height: 500px;
+}
+
+.alert-container {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 520px;
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.alert-container::-webkit-scrollbar {
+  width: 6px;
+}
+.alert-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+.alert-container::-webkit-scrollbar-thumb {
+  background: var(--bg-hover);
+  border-radius: 3px;
+}
+
+/* --- Alert Card --- */
+.alert-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  border-left: 3px solid var(--accent-amber);
+  transition: border-color var(--transition-normal);
+}
+
+/* High-severity cards get a glowing red left border */
+.alert-card.severity-high {
+  border-left-color: var(--accent-red);
+  box-shadow: inset 3px 0 12px rgba(239, 68, 68, 0.08);
+}
+
+.alert-card.severity-medium {
+  border-left-color: var(--accent-amber);
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+/* Severity badge */
+.severity-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.severity-badge.severity-high {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--accent-red);
+}
+
+.severity-badge.severity-medium {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-amber);
+}
+
+.alert-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Fraud reason tags --- */
+.alert-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: var(--space-sm);
+}
+
+.reason-tag {
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-blue);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* --- Transaction details inside alert --- */
+.alert-transaction {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.alert-tx-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  font-size: 0.78rem;
+}
+
+.alert-tx-label {
+  color: var(--text-muted);
+}
+
+.alert-tx-amount {
+  color: var(--accent-red);
+  font-weight: 600;
+}
+
+/* --- Detector context --- */
+.alert-context {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.context-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.context-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  padding: 1px 0;
+}
+
+.context-key {
+  color: var(--text-secondary);
+}
+
+.context-value {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Alert footer --- */
+.alert-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.alert-id {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-family: monospace;
+}
+
+/* =============================================================================
+ * CLUSTER CONTROLS (Phase 2 Placeholder)
+ * ============================================================================= */
+.cluster-panel {
+  margin-bottom: var(--space-lg);
+}
+
+.cluster-content {
+  padding: var(--space-lg);
+}
+
+.gateway-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  color: var(--accent-amber);
+}
+
+.gateway-notice strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+}
+
+.gateway-notice p {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.cluster-services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.service-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.service-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.service-replicas {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.service-buttons {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.scale-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: not-allowed;
+  opacity: 0.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+/* =============================================================================
+ * EMPTY STATES
+ * ============================================================================= */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) var(--space-md);
+  color: var(--text-muted);
+  text-align: center;
+  min-height: 200px;
+}
+
+.empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-md);
+}
+
+.empty-hint {
+  font-size: 0.75rem;
+  margin-top: var(--space-sm);
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* =============================================================================
+ * ANIMATIONS
+ * ============================================================================= */
+
+/* Pulse animation for the connection status dot */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* Fade-in animation for new rows and alert cards */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* =============================================================================
+ * RESPONSIVE DESIGN
+ *
+ * On smaller screens:
+ *   - Stats bar collapses from 4 columns to 2
+ *   - Dashboard grid stacks vertically
+ *   - Cluster controls stack vertically
+ * ============================================================================= */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cluster-services {
+    grid-template-columns: 1fr;
+  }
+
+  .navbar {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .navbar-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .main-content {
+    padding: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-bar {
+    grid-template-columns: 1fr;
+  }
+}
