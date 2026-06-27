@@ -60,7 +60,7 @@ jobs:
         run: python -m py_compile workers/config.py workers/producer.py workers/fraud_detector.py workers/alert_consumer.py workers/transaction_generator.py
 
   # ---------------------------------------------------------------------------
-  # Java Tests — Gradle build + JUnit tests for the Dashboard API
+  # Java Tests — Gradle build + JUnit tests for all Java microservices
   # ---------------------------------------------------------------------------
   java-test:
     name: Java Tests (Gradle)
@@ -76,12 +76,26 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build and test
+      - name: Build and test sse-stream
         working-directory: sse_stream
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+
+      - name: Build and test cluster-controller
+        working-directory: cluster_controller
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+
+      - name: Build and test api-gateway
+        working-directory: api_gateway
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
   # ---------------------------------------------------------------------------
-  # Docker Builds — verify both application images build successfully
+  # Docker Builds — verify all microservice images build successfully
   # ---------------------------------------------------------------------------
   docker-build:
     name: Docker Build
@@ -94,6 +108,12 @@ jobs:
 
       - name: Build sse-stream image
         run: docker build -t fraud-detection-sse-stream ./sse_stream
+
+      - name: Build cluster-controller image
+        run: docker build -t fraud-detection-cluster-controller ./cluster_controller
+
+      - name: Build api-gateway image
+        run: docker build -t fraud-detection-api-gateway ./api_gateway
 
   # ---------------------------------------------------------------------------
   # Compose Validation — ensure docker-compose.yml is well-formed

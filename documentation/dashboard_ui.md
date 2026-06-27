@@ -1,27 +1,31 @@
 # Dashboard UI: Service Documentation
 
-The `frontend/` directory contains a **React + TypeScript** single-page application that provides a real-time monitoring dashboard for the fraud detection pipeline. It connects to the SSE Stream backend (`SSE_stream`) to display live transaction data and fraud alerts as they flow through the system.
+The `frontend/` directory contains a **React + TypeScript** single-page application that provides a real-time monitoring dashboard for the fraud detection pipeline. It connects to the API Gateway (`api_gateway`) to display live transaction data, fraud alerts, and scale the worker cluster.
 
 ## Architecture Overview
 
 ```mermaid
-graph LR
+graph TD
+    subgraph "Browser"
+        React["React Dashboard :5173 / :3001"]
+    end
+
     subgraph "Docker Network"
+        Gateway["API Gateway :8090"]
+        SSE["SSE Stream :8085"]
+        Controller["Cluster Controller :9095"]
         Producer["Python Producer"]
         Detector["Python Fraud Detector"]
         Kafka["Kafka"]
-        SSE["SSE Stream :8085"]
     end
 
-    subgraph "Browser"
-        React["React Dashboard :5173"]
-    end
-
+    React -->|"Fetch & SSE to /api/*"| Gateway
+    Gateway -->|"/api/sse/** (HTTP)"| SSE
+    Gateway -->|"/api/cluster/** (gRPC)"| Controller
+    
     Producer -->|transactions| Kafka
     Detector -->|fraud-alerts| Kafka
     Kafka --> SSE
-    SSE -->|"EventSource /api/sse/transactions"| React
-    SSE -->|"EventSource /api/sse/alerts"| React
 ```
 
 ## Technology Stack
@@ -43,22 +47,25 @@ App.tsx                          ← Root orchestrator
 ├── Dashboard Grid (CSS Grid)
 │   ├── TransactionFeed.tsx      ← Scrolling table of recent transactions
 │   └── AlertPanel.tsx           ← Fraud alert cards with severity badges
-└── ClusterControls.tsx          ← Scaling buttons (disabled until Phase 2)
+└── ClusterControls.tsx          ← Scaling buttons (fully active)
 ```
 
 ### Data Flow
 
 ```
-SSE_stream:8085 ──→ useTransactionStream hook ──→ transactions[] ──→ TransactionFeed
-                                                                   ──→ StatsBar (TPS, total)
-SSE_stream:8085 ──→ useAlertStream hook       ──→ alerts[]        ──→ AlertPanel
-                                                                   ──→ StatsBar (alerts, rate)
+                              ──→ useTransactionStream hook ──→ transactions[] ──→ TransactionFeed
+                             │                                                 ──→ StatsBar (TPS, total)
+api-gateway:8090 ──→ Browser │
+                             │──→ useAlertStream hook       ──→ alerts[]        ──→ AlertPanel
+                             │                                                 ──→ StatsBar (alerts, rate)
+                             │
+                              ──→ useClusterApi hook        ──→ ClusterControls (scale / health)
 ```
 
 ## Custom Hooks
 
 ### `useTransactionStream`
-Opens an `EventSource` connection to `/api/sse/transactions`. Maintains a rolling buffer of the 100 most recent transactions. Auto-reconnects with exponential backoff (1s → 2s → 4s → ... → 30s max) if the connection drops.
+Opens an `EventSource` connection to `/api/sse/transactions` via the API Gateway. Maintains a rolling buffer of the 100 most recent transactions. Auto-reconnects with exponential backoff (1s → 2s → 4s → ... → 30s max) if the connection drops.
 
 ### `useAlertStream`
 Same pattern as above, but connects to `/api/sse/alerts` and maintains up to 50 alerts.
@@ -67,6 +74,12 @@ Same pattern as above, but connects to `/api/sse/alerts` and maintains up to 50 
 Derives computed statistics from the raw event counts:
 - **TPS (Transactions Per Second):** Uses a 5-second sliding window. Timestamps of recent events are stored in a buffer, and a 1-second interval prunes old entries and divides the count by 5.
 - **Alert Rate:** Simple percentage: `(totalAlerts / totalTransactions) * 100`.
+
+### `useClusterApi`
+Wraps REST endpoints exposed by the API Gateway to interact with the cluster control plane:
+- `fetchHealth(service)`: Queries current active replicas and status via `GET /api/cluster/health/{service}`.
+- `scaleService(service, replicas)`: Invokes container scaling via `POST /api/cluster/scale`.
+- `updateConfig(config)`: Adjusts simulation speed, users, and burst probability via `POST /api/cluster/config`.
 
 ## How SSE Works in the Browser
 
@@ -101,6 +114,7 @@ Key visual features:
 - **Fade-in animations:** New table rows and alert cards slide in smoothly
 - **Pulsing connection dot:** Green when connected, red when disconnected
 - **Color-coded amounts:** Green (< $500), amber ($500-$5000), red (> $5000)
+- **Active Scaling Buttons:** Interactive `+` and `-` buttons with hover, active, and loading/disabled states.
 
 ## Running Locally
 
@@ -111,23 +125,29 @@ Key visual features:
 ### Development Mode (with hot reload)
 
 ```bash
-# 1. Start the backend services
+# 1. Start backend services
 docker compose up -d
 
-# 2. Stop the Docker version of sse-stream (to avoid port conflict)
-docker compose stop sse-stream
+# 2. Stop Docker versions of Java microservices to run them locally (optional for local Java debugging)
+docker compose stop sse-stream cluster-controller api-gateway
 
-# 3. Start the SSE stream locally (in a separate terminal)
-cd SSE_stream && KAFKA_BOOTSTRAP_SERVERS="localhost:9094" ./gradlew bootRun
+# 3. Start cluster-controller (in terminal 1)
+cd cluster_controller && COMPOSE_PROJECT_DIR=".." REDIS_HOST="localhost" ./gradlew bootRun
 
-# 4. Start the React dev server (in another terminal)
+# 4. Start sse-stream (in terminal 2)
+cd sse_stream && KAFKA_BOOTSTRAP_SERVERS="localhost:9094" ./gradlew bootRun
+
+# 5. Start api-gateway (in terminal 3)
+cd api_gateway && ./gradlew bootRun
+
+# 6. Start the React dev server (in terminal 4)
 cd frontend && npm run dev
 ```
 
-Open http://localhost:5173 — you should see live transactions streaming in.
+Open http://localhost:5173 — you should see live transactions streaming in, and cluster control scaling buttons will be interactive.
 
 **How the proxy works in dev mode:**
-Vite's dev server proxies `/api/*` requests to `http://localhost:8085` (configured in `vite.config.ts`). This avoids CORS errors since the browser thinks all requests go to `localhost:5173`.
+Vite's dev server proxies `/api/*` requests to `http://localhost:8090` (configured in `vite.config.ts`), which is the API Gateway port. This avoids CORS errors since the browser thinks all requests go to `localhost:5173`.
 
 ### Production Mode (via Docker)
 
@@ -139,7 +159,7 @@ docker compose up -d --build
 # http://localhost:3001
 ```
 
-In production, nginx inside the `dashboard-ui` container handles the proxying. Requests to `/api/*` are forwarded to the `sse-stream` container on the Docker network.
+In production, nginx inside the `dashboard-ui` container handles the proxying. Requests to `/api/*` are forwarded to the `api-gateway` container on port `8090` over the Docker network.
 
 ## Port Map
 
@@ -147,15 +167,6 @@ In production, nginx inside the `dashboard-ui` container handles the proxying. R
 |------|---------|--------|
 | `5173` | Vite dev server | Dev only — `npm run dev` |
 | `3001` | nginx (Docker) | Production — `docker compose up` |
-| `8085` | SSE Stream API | Backend (proxied, not accessed directly by the UI) |
-
-## Future: API Gateway Integration (Phase 2)
-
-The `ClusterControls` component is currently disabled because the cluster controller only speaks gRPC, which browsers cannot call directly. When the API Gateway is built:
-
-1. The Gateway will expose REST endpoints like `POST /api/cluster/scale`
-2. It will translate REST calls into gRPC RPCs for the cluster controller
-3. We will update `ClusterControls.tsx` to call these REST endpoints
-4. The Vite proxy and nginx config will be updated to route `/api/cluster/*` to the Gateway
-
-The UI layout is already finalized — enabling cluster controls will be a code change in one component, not a redesign.
+| `8090` | API Gateway | Host Entry point (proxied by Vite/nginx) |
+| `8085` | SSE Stream API | Backend (internal access only) |
+| `9095` | Cluster Controller | Control Plane gRPC (internal access only) |
