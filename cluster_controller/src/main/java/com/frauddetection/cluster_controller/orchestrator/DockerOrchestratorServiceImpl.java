@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -48,32 +51,59 @@ public class DockerOrchestratorServiceImpl implements OrchestratorService {
     private String composeProjectDir;
 
     /**
-     * Scale a Docker Compose service to the desired number of replicas.
+     * Scale a Docker Compose service to the desired number of replicas WITHOUT
+     * affecting any other services.
      *
-     * Under the hood, this runs the equivalent of typing in your terminal:
-     *   docker compose up -d --scale producer=5 --no-recreate
+     * ROOT CAUSE OF THE CROSS-SERVICE BUG:
+     *   Both `docker compose up --scale X=N` and `docker compose scale X=N`
+     *   reconcile the whole Compose project. Any service whose running count
+     *   differs from its YAML default (usually 1) gets reset back to that
+     *   default if its --scale flag is not explicitly provided.
      *
-     * The --no-recreate flag is important: it tells Docker "don't restart
-     * containers that are already running, just add/remove as needed."
-     * Without it, Docker would destroy ALL existing containers and create
-     * fresh ones, causing unnecessary downtime.
+     * FIX:
+     *   We always pass --scale for EVERY scalable service simultaneously.
+     *   For the service being changed, we use the requested replica count.
+     *   For every other scalable service, we first query how many are currently
+     *   running and pass that exact number so Docker Compose leaves them alone.
      */
     @Override
     public String scaleService(String serviceName, int replicas) throws Exception {
         log.info("Scaling service '{}' to {} replicas via Docker Compose", serviceName, replicas);
 
-        // Build the command as an array of strings.
-        // ProcessBuilder takes each argument separately (not as one big string)
-        // to avoid shell injection vulnerabilities.
-        String[] command = {
-            "docker", "compose",
-            "up", "-d",
-            "--scale", serviceName + "=" + replicas,
-            "--no-recreate"
-        };
+        // --- Step 1: Read the current replica count of each OTHER scalable service ---
+        // We must pass explicit --scale flags for all scalable services so Compose
+        // doesn't silently reset any of them to their YAML default of 1.
+        List<String> scalableServices = List.of("producer", "fraud-detector");
 
-        // Execute the command and capture the result.
-        String output = executeCommand(command);
+        // Start building the command: docker compose up -d --no-recreate
+        List<String> command = new ArrayList<>(
+            Arrays.asList("docker", "compose", "up", "-d", "--no-recreate")
+        );
+
+        for (String svc : scalableServices) {
+            int count;
+            if (svc.equals(serviceName)) {
+                // This is the service being scaled — use the requested count.
+                count = replicas;
+            } else {
+                // For every other service, query how many are currently running
+                // so we can preserve their count exactly.
+                try {
+                    count = getRunningCount(svc);
+                    // If the service hasn't started yet (0), default to 1 so
+                    // we don't accidentally stop it.
+                    if (count <= 0) count = 1;
+                } catch (Exception e) {
+                    log.warn("Could not read current replica count for '{}', defaulting to 1. Reason: {}", svc, e.getMessage());
+                    count = 1;
+                }
+            }
+            command.add("--scale");
+            command.add(svc + "=" + count);
+        }
+
+        // --- Step 2: Execute the command ---
+        String output = executeCommand(command.toArray(new String[0]));
         log.info("Scale command completed. Output: {}", output);
 
         return "Scaled " + serviceName + " to " + replicas + " replicas";

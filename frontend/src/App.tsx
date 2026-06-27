@@ -13,7 +13,7 @@
 //   ├── Main Grid
 //   │   ├── TransactionFeed — Scrolling table of recent transactions
 //   │   └── AlertPanel      — Fraud alert cards with severity badges
-//   └── ClusterControls     — Scaling buttons (disabled until Gateway)
+//   └── ClusterControls     — Scaling buttons (connected via API Gateway)
 //
 // DATA FLOW:
 //   The two SSE hooks (useTransactionStream, useAlertStream) each open
@@ -33,6 +33,7 @@ import { StatsBar } from "./components/StatsBar";
 import { TransactionFeed } from "./components/TransactionFeed";
 import { AlertPanel } from "./components/AlertPanel";
 import { ClusterControls } from "./components/ClusterControls";
+import { SystemHealth } from "./components/SystemHealth";
 import { useTransactionStream } from "./hooks/useTransactionStream";
 import { useAlertStream } from "./hooks/useAlertStream";
 import { useStats } from "./hooks/useStats";
@@ -74,8 +75,11 @@ function App() {
           <AlertPanel alerts={alerts} />
         </div>
 
-        {/* Cluster scaling controls (disabled until Phase 2 Gateway) */}
+        {/* Cluster scaling + simulation controls */}
         <ClusterControls />
+
+        {/* System-wide health overview for all Compose services */}
+        <SystemHealth />
       </main>
     </div>
   );

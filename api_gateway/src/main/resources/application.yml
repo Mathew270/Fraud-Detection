@@ -1,0 +1,47 @@
+# =============================================================================
+# application.yml — API Gateway Configuration
+#
+# Configures the entry point port (8090), the routing rules to redirect
+# SSE requests to the sse-stream service, and the gRPC client connection
+# pointing to the cluster-controller.
+# =============================================================================
+
+server:
+  # Port 8090 is the single entry point for the frontend dashboard
+  port: 8090
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # We define routes here. Any requests starting with /api/sse/ will be
+          # proxied to the sse-stream service. Requests starting with /api/cluster/
+          # are NOT routed via gateway; they are handled locally by our custom
+          # REST controllers in this application.
+          routes:
+            - id: sse-stream-route
+              uri: ${SSE_STREAM_URI:http://localhost:8085}
+              predicates:
+                - Path=/api/sse/**
+
+# --- gRPC Client Configuration ---
+# Configures the gRPC channel pointing to cluster-controller.
+# The 'grpc-client-spring-boot-starter' library reads this to auto-inject stubs.
+# Inside docker-compose, we point to cluster-controller:9095.
+# For local dev, we default to localhost:9095.
+grpc:
+  client:
+    cluster-controller:
+      address: ${CLUSTER_CONTROLLER_GRPC_ADDRESS:static://localhost:9095}
+      negotiation-type: plaintext
+
+# --- Logging ---
+logging:
+  level:
+    com.frauddetection.api_gateway: DEBUG
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web: INFO

@@ -12,6 +12,7 @@ For a quick-start guide and project overview, see the [main README](../README.md
 | :--- | :--- |
 | [workers.md](./workers.md) | Python data-plane: `producer.py`, `fraud_detector.py`, `alert_consumer.py`, `redis_listener.py`, `transaction_generator.py`, `config.py` |
 | [sse_stream.md](./sse_stream.md) | Java Spring WebFlux SSE proxy: Kafka consumers, Reactor Sinks, SSE endpoints, data models |
+| [api_gateway.md](./api_gateway.md) | Java Spring Cloud Gateway: REST-to-gRPC translation, reactive reverse proxy, global CORS |
 | [cluster_controller.md](./cluster_controller.md) | Java gRPC control plane: component roles, Strategy Pattern, DooD containerisation, Kubernetes migration strategy |
 | [monitoring.md](./monitoring.md) | Prometheus scrape config, DNS service discovery, Grafana provisioning, available metrics |
 | [infrastructure.md](./infrastructure.md) | Docker Compose topology, Kafka KRaft setup, Redis roles, networking, port reference |
@@ -31,7 +32,8 @@ flowchart TD
     KafkaAlerts["Kafka: 'fraud-alerts' topic"]
     DashAPI["sse_stream (Java)\nSSE streams"]
     AlertConsumer["alert_consumer.py\n(legacy stdout)"]
-    Browser["Browser\nGET /api/sse/transactions\nGET /api/sse/alerts"]
+    Browser["Browser / Dashboard UI"]
+    Gateway["api_gateway (Java)\nPort 8090"]
     ClusterCtrl["cluster_controller (Java gRPC)\nPort 9095"]
     RedisPubSub["Redis Pub/Sub\n'simulation-config' channel"]
     RedisListener["redis_listener.py\nin each producer"]
@@ -47,8 +49,11 @@ flowchart TD
     FraudDet -->|if fraud: Kafka PRODUCE| KafkaAlerts
     KafkaAlerts --> DashAPI
     KafkaAlerts --> AlertConsumer
-    DashAPI --> Browser
-
+    
+    Browser -->|GET /api/sse/*\nPOST /api/cluster/*| Gateway
+    Gateway -->|HTTP proxy| DashAPI
+    Gateway -->|gRPC call| ClusterCtrl
+    
     ClusterCtrl -->|UpdateSimulationConfig| RedisPubSub
     ClusterCtrl -->|ScaleWorker| DockerCompose
     RedisPubSub --> RedisListener

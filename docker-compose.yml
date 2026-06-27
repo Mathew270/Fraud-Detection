@@ -37,7 +37,7 @@
 #     8000  — Producer Prometheus metrics
 #     8002  — Fraud detector Prometheus metrics
 #     9121  — Redis exporter Prometheus metrics
-# =============================================================================
+name: fraud-detection
 
 services:
 
@@ -159,19 +159,51 @@ services:
   # Replaces alert-consumer.py — the dashboard now handles alert display.
   # ---------------------------------------------------------------------------
   sse-stream:
-    build: ./SSE_stream
+    build: ./sse_stream
     container_name: sse-stream
-    ports:
-      - "8085:8085"                     # SSE API (exposed to host for browser access)
+    expose:
+      - "8085"
     depends_on:
       kafka:
         condition: service_healthy
     restart: on-failure
 
+  cluster-controller:
+    build: ./cluster_controller
+    container_name: cluster-controller
+    expose:
+      - "9095"
+    ports:
+      - "9095:9095"                     # Expose gRPC port to the host
+    environment:
+      - REDIS_HOST=redis
+      - ORCHESTRATOR_PROFILE=docker
+      - COMPOSE_PROJECT_DIR=/app/project
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - .:/app/project
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: on-failure
+
+  api-gateway:
+    build: ./api_gateway
+    container_name: api-gateway
+    ports:
+      - "8090:8090"
+    environment:
+      - SSE_STREAM_URI=http://sse-stream:8085
+      - CLUSTER_CONTROLLER_GRPC_ADDRESS=static://cluster-controller:9095
+    depends_on:
+      - sse-stream
+      - cluster-controller
+    restart: on-failure
+
   # ---------------------------------------------------------------------------
   # Dashboard UI — React frontend served by nginx.
-  # Connects to the SSE stream backend to display live transactions and
-  # fraud alerts. Nginx proxies /api/* requests to the sse-stream container.
+  # Connects to the API Gateway to display live transactions, fraud alerts, and scale workers.
+  # Nginx proxies /api/* requests to the api-gateway container.
   # ---------------------------------------------------------------------------
   dashboard-ui:
     build: ./frontend
@@ -179,7 +211,7 @@ services:
     ports:
       - "3001:80"                       # Dashboard UI (nginx on port 80 → host port 3001)
     depends_on:
-      - sse-stream
+      - api-gateway
     restart: on-failure
 
   # ---------------------------------------------------------------------------

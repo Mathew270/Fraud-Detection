@@ -28,6 +28,15 @@ cluster_controller/.vscode/
 !cluster_controller/**/src/main/**/build/
 !cluster_controller/**/src/test/**/build/
 
+# api_gateway
+api_gateway/HELP.md
+api_gateway/.gradle/
+api_gateway/build/
+api_gateway/.vscode/
+!api_gateway/gradle/wrapper/gradle-wrapper.jar
+!api_gateway/**/src/main/**/build/
+!api_gateway/**/src/test/**/build/
+
 # IDE and Project specific
 .apt_generated
 .classpath

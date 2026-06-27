@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+// =============================================================================
+// cluster_service.proto — The gRPC Contract
+//
+// This file is the "blueprint" or "contract" for our Cluster Controller API.
+// It defines WHAT operations the controller supports and WHAT data each
+// operation sends/receives. Think of it like a menu at a restaurant:
+//   - The "service" block lists all the dishes (operations) you can order.
+//   - The "message" blocks describe each dish's ingredients (data fields).
+//
+// When Gradle runs, it reads this file and auto-generates Java classes that
+// handle all the networking. You never write socket code yourself — you just
+// implement the business logic and gRPC handles the rest.
+//
+// WHY PROTOBUF INSTEAD OF JSON?
+//   JSON is text-based:  {"replicas": 5}  = 16 bytes, needs parsing.
+//   Protobuf is binary:  [0x08, 0x05]     = 2 bytes, no parsing needed.
+//   For internal service-to-service calls that happen thousands of times
+//   per second, this difference adds up massively.
+// =============================================================================
+
+// These options control how the generated Java code is organized.
+// java_multiple_files = true means each message gets its own .java file
+// instead of being nested inside one giant outer class.
+option java_multiple_files = true;
+option java_package = "com.frauddetection.cluster_controller.grpc";
+option java_outer_classname = "ClusterProto";
+
+// The "package" in Protobuf is like a namespace. It prevents naming collisions
+// if you ever merge multiple .proto files from different projects.
+package cluster;
+
+// =============================================================================
+// The Service Definition
+//
+// This is the "menu" of operations. Each "rpc" line defines one operation:
+//   rpc OperationName (InputMessage) returns (OutputMessage);
+//
+// After code generation, you'll get a Java class called
+// ClusterServiceGrpc.ClusterServiceImplBase that has empty methods for each
+// of these operations. Your job is to create a class that extends it and
+// fills in the actual logic.
+// =============================================================================
+service ClusterService {
+
+  // Scale a specific worker service (e.g., "producer" or "fraud-detector")
+  // to a desired number of running containers.
+  // Example: ScaleWorker({service_name: "producer", replicas: 5})
+  //   → Tells Docker to ensure exactly 5 producer containers are running.
+  rpc ScaleWorker (ScaleRequest) returns (ScaleResponse);
+
+  // Push new simulation parameters to ALL running producer containers
+  // simultaneously. The controller publishes these values to Redis,
+  // and every producer picks them up instantly without restarting.
+  // Example: UpdateSimulationConfig({num_users: 50, burst_probability: 0.4})
+  rpc UpdateSimulationConfig (SimulationConfigRequest) returns (SimulationConfigResponse);
+
+  // Ask the controller "How many containers of service X are running right now?"
+  // Useful for the frontend dashboard to display live infrastructure stats.
+  rpc GetClusterHealth (HealthRequest) returns (HealthResponse);
+}
+
+// =============================================================================
+// Messages for Scaling
+// =============================================================================
+
+// The input data for a ScaleWorker request.
+// Each field has a unique number (1, 2, etc.) which Protobuf uses internally
+// for ultra-fast binary encoding. These numbers must NEVER change once deployed.
+message ScaleRequest {
+  // The name of the docker-compose service to scale.
+  // Must match exactly what's in docker-compose.yml (e.g., "producer", "fraud-detector").
+  string service_name = 1;
+
+  // How many containers we want running for this service.
+  // Setting replicas=0 effectively stops all containers of that service.
+  int32 replicas = 2;
+}
+
+// The response after a scaling operation completes.
+message ScaleResponse {
+  // true if Docker successfully accepted the scaling command.
+  bool success = 1;
+
+  // A human-readable summary, e.g., "Scaled producer to 5 replicas"
+  string message = 2;
+
+  // The actual number of containers now running (confirmed by Docker).
+  int32 current_replicas = 3;
+}
+
+// =============================================================================
+// Messages for Simulation Control
+// =============================================================================
+
+// The input data for changing how the Python producers generate transactions.
+message SimulationConfigRequest {
+  // How many simulated users are in the active pool.
+  // More users = more variety in transaction patterns.
+  int32 num_users = 1;
+
+  // The probability (0.0 to 1.0) that a producer will generate a "burst"
+  // of rapid-fire transactions. Higher = more fraud-like patterns.
+  double burst_probability = 2;
+
+  // A multiplier for how fast transactions are generated.
+  // 1.0 = normal speed, 2.0 = double speed, 0.5 = half speed.
+  double speed_multiplier = 3;
+}
+
+// The response after broadcasting a config change.
+message SimulationConfigResponse {
+  // true if the config was successfully published to Redis.
+  bool success = 1;
+
+  // A human-readable summary, e.g., "Config broadcasted to 3 active producers"
+  string message = 2;
+}
+
+// =============================================================================
+// Messages for Health Monitoring
+// =============================================================================
+
+// The input for a health check request.
+message HealthRequest {
+  // Which service to inspect. Leave empty to get health for ALL services.
+  string service_name = 1;
+}
+
+// The response containing the current cluster state.
+message HealthResponse {
+  // How many containers of this service are currently RUNNING.
+  int32 active_replicas = 1;
+
+  // Overall status string: "HEALTHY", "SCALING", "DEGRADED", or "STOPPED".
+  string status = 2;
+
+  // The name of the service this health report is about.
+  string service_name = 3;
+}
