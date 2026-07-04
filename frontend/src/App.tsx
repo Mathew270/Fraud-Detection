@@ -34,6 +34,7 @@ import { TransactionFeed } from "./components/TransactionFeed";
 import { AlertPanel } from "./components/AlertPanel";
 import { ClusterControls } from "./components/ClusterControls";
 import { SystemHealth } from "./components/SystemHealth";
+import { PipelineAnimation } from "./components/PipelineAnimation";
 import { useTransactionStream } from "./hooks/useTransactionStream";
 import { useAlertStream } from "./hooks/useAlertStream";
 import { useStats } from "./hooks/useStats";
@@ -74,6 +75,9 @@ function App() {
           <TransactionFeed transactions={transactions} />
           <AlertPanel alerts={alerts} />
         </div>
+
+        {/* Transaction pipeline visualisation — great for demos & onboarding */}
+        <PipelineAnimation />
 
         {/* Cluster scaling + simulation controls */}
         <ClusterControls />

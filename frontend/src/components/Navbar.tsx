@@ -3,13 +3,9 @@
 //
 // Displays:
 //   1. Application logo and title
-//   2. Live connection status indicator (pulsing green dot when connected)
-//   3. Real-time clock showing current time
-//
-// The connection indicator is crucial for operators — if the SSE stream
-// disconnects (e.g., the sse-stream container crashes), the dot turns
-// red immediately, giving instant visual feedback without needing to
-// check the browser console.
+//   2. Grafana dashboard shortcut links
+//   3. Live connection status indicator (pulsing green dot when connected)
+//   4. Real-time clock showing current time
 // =============================================================================
 
 import { useState, useEffect } from "react";
@@ -21,11 +17,7 @@ interface NavbarProps {
 }
 
 /**
- * Top navigation bar with branding, connection status, and live clock.
- *
- * The clock updates every second using a local setInterval. This is
- * intentionally not synced to the SSE stream — it should always tick
- * even when the stream is disconnected.
+ * Top navigation bar with branding, Grafana links, connection status, and live clock.
  */
 export function Navbar({ connectionStatus }: NavbarProps) {
   const [time, setTime] = useState(new Date());
@@ -36,7 +28,6 @@ export function Navbar({ connectionStatus }: NavbarProps) {
     return () => clearInterval(interval);
   }, []);
 
-  // Format time as HH:MM:SS with 12-hour format
   const formattedTime = time.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
@@ -44,7 +35,6 @@ export function Navbar({ connectionStatus }: NavbarProps) {
     hour12: true,
   });
 
-  // Format date as "Mon, Jun 10 2026"
   const formattedDate = time.toLocaleDateString("en-US", {
     weekday: "short",
     month: "short",
@@ -57,17 +47,7 @@ export function Navbar({ connectionStatus }: NavbarProps) {
       {/* --- Left: Logo and title --- */}
       <div className="navbar-brand">
         <div className="navbar-logo">
-          {/* Shield icon representing fraud protection */}
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
             <path d="M9 12l2 2 4-4" />
           </svg>
@@ -78,8 +58,41 @@ export function Navbar({ connectionStatus }: NavbarProps) {
         </div>
       </div>
 
-      {/* --- Right: Connection status and clock --- */}
+      {/* --- Right: Grafana links, connection status, clock --- */}
       <div className="navbar-right">
+
+        {/* Grafana shortcut links */}
+        <div className="grafana-links" id="grafana-links">
+          <a
+            id="grafana-backend-link"
+            className="grafana-link"
+            href="http://localhost:3000/d/backend-ops"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open Backend Operations dashboard in Grafana"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+            Backend Ops
+          </a>
+          <a
+            id="grafana-txn-link"
+            className="grafana-link"
+            href="http://localhost:3000/d/transaction-analytics"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Open Transaction Analytics dashboard in Grafana"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="18" y1="20" x2="18" y2="10" />
+              <line x1="12" y1="20" x2="12" y2="4"  />
+              <line x1="6"  y1="20" x2="6"  y2="14" />
+            </svg>
+            Transactions
+          </a>
+        </div>
+
         {/* Connection status indicator */}
         <div className="connection-status" id="connection-indicator">
           <span
