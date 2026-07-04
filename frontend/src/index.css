@@ -249,6 +249,44 @@ body::before {
   animation: pulse 1s ease-in-out infinite;
 }
 
+/* --- Grafana Links in Navbar --- */
+.grafana-links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.grafana-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  padding: 6px 14px;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.grafana-link:hover {
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+  background: var(--bg-hover);
+  transform: translateY(-1px);
+}
+
+.grafana-link svg {
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.grafana-link:hover svg {
+  color: var(--text-primary);
+}
+
 .status-text {
   font-size: 0.8rem;
   font-weight: 500;
@@ -1182,6 +1220,143 @@ body::before {
   .health-card {
     min-width: 72px;
     padding: var(--space-xs, 4px) var(--space-sm);
+  }
+}
+
+/* =============================================================================
+ * PIPELINE ANIMATION PANEL
+ * ============================================================================= */
+.pipeline-panel {
+  margin-top: var(--space-lg);
+}
+
+.pipeline-content {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  overflow: visible;
+}
+
+.pipeline-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+  transition: background-color 0.3s;
+}
+
+/* Flash the whole pipeline visualization area slightly on fraud detection */
+.pipeline-svg.fraud-flash {
+  animation: svg-red-flash 0.6s ease-out;
+}
+
+@keyframes svg-red-flash {
+  0% { background-color: rgba(239, 68, 68, 0.05); }
+  100% { background-color: transparent; }
+}
+
+.pipeline-node circle {
+  transition: all var(--transition-normal);
+}
+
+.pipeline-node:hover circle {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+}
+
+.pipeline-node text {
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Tooltip design */
+.pipeline-tooltip {
+  position: absolute;
+  background: rgba(17, 24, 39, 0.95);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  width: 250px;
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+  z-index: 10;
+  transform: translateX(-50%);
+  animation: fadeIn var(--transition-fast) ease-out;
+}
+
+.pipeline-tooltip strong {
+  display: block;
+  font-size: 0.85rem;
+  margin-bottom: 2px;
+}
+
+.pipeline-tooltip-sub {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.pipeline-tooltip p {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Legend design */
+.pipeline-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.pipeline-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.pipeline-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.pipeline-legend-hint {
+  margin-left: auto;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, 5px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (max-width: 768px) {
+  .pipeline-tooltip {
+    width: 200px;
+    padding: var(--space-sm);
+  }
+  .pipeline-legend-hint {
+    display: none;
+  }
+  .grafana-links {
+    display: none; /* Hide on mobile to avoid overcrowding */
   }
 }
 

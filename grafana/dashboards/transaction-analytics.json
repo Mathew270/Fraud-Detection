@@ -1,0 +1,209 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "graphTooltip": 1,
+  "links": [],
+  "panels": [
+
+    {
+      "id": 1,
+      "title": "Transaction Rate",
+      "description": "Transactions generated per second across all producer replicas",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3b82f6", "mode": "fixed" },
+          "unit": "reqps",
+          "custom": { "fillOpacity": 20, "lineWidth": 2 }
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "sum(rate(producer_transactions_produced_total[1m]))", "legendFormat": "txn/s", "refId": "A" }
+      ]
+    },
+
+    {
+      "id": 2,
+      "title": "Fraud vs OK Volume (5-min buckets)",
+      "description": "Stacked view of legitimate vs fraudulent transactions over time",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "short",
+          "custom": { "fillOpacity": 40, "lineWidth": 1, "stacking": { "mode": "normal", "group": "A" } }
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "fraud" }, "properties": [{ "id": "color", "value": { "fixedColor": "#ef4444", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "ok"    }, "properties": [{ "id": "color", "value": { "fixedColor": "#10b981", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        { "expr": "increase(detector_transactions_processed_total{outcome=\"ok\"}[5m])",    "legendFormat": "ok",    "refId": "A" },
+        { "expr": "increase(detector_transactions_processed_total{outcome=\"fraud\"}[5m])", "legendFormat": "fraud", "refId": "B" }
+      ]
+    },
+
+    {
+      "id": 3,
+      "title": "Fraud Detection Rate",
+      "description": "Percentage of transactions flagged as fraud — watch for sudden spikes (burst mode) or drops (config change)",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#f59e0b", "mode": "fixed" },
+          "unit": "percentunit",
+          "min": 0, "max": 1,
+          "custom": { "fillOpacity": 15, "lineWidth": 2 }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "rate(detector_transactions_processed_total{outcome=\"fraud\"}[1m]) / sum(rate(detector_transactions_processed_total[1m]))",
+          "legendFormat": "fraud %",
+          "refId": "A"
+        }
+      ]
+    },
+
+    {
+      "id": 4,
+      "title": "Fraud Reasons Breakdown",
+      "description": "Which fraud rule triggers most often — helps tune thresholds",
+      "type": "piechart",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": {
+        "pieType": "donut",
+        "displayLabels": ["name", "percent"],
+        "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] }
+      },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "sum by (reason) (increase(detector_fraud_reasons_total[15m]))", "legendFormat": "{{ reason }}", "refId": "A" }
+      ]
+    },
+
+    {
+      "id": 5,
+      "title": "Fraud Reasons Rate Over Time",
+      "description": "Rate each fraud rule fires — shows which patterns are most active right now",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 24, "x": 0, "y": 15 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "unit": "reqps",
+          "custom": { "fillOpacity": 10, "lineWidth": 2 }
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "rate(detector_fraud_reasons_total[1m])", "legendFormat": "{{ reason }}", "refId": "A" }
+      ]
+    },
+
+    {
+      "id": 6,
+      "title": "Total Transactions Produced",
+      "description": "Cumulative transactions sent to Kafka since last restart",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#3b82f6", "mode": "fixed" },
+          "unit": "short", "decimals": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "sum(producer_transactions_produced_total)", "legendFormat": "transactions", "refId": "A" }
+      ]
+    },
+
+    {
+      "id": 7,
+      "title": "Total Fraud Alerts",
+      "description": "Cumulative fraud events detected since last restart",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 6, "x": 6, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#ef4444", "mode": "fixed" },
+          "unit": "short", "decimals": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "sum(detector_transactions_processed_total{outcome=\"fraud\"})", "legendFormat": "alerts", "refId": "A" }
+      ]
+    },
+
+    {
+      "id": 8,
+      "title": "Huge Amount Alerts",
+      "description": "Alerts triggered by the huge-amount rule (single transaction above threshold)",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 6, "x": 12, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#f59e0b", "mode": "fixed" },
+          "unit": "short", "decimals": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "sum(detector_fraud_reasons_total{reason=\"huge_amount\"})", "legendFormat": "huge amount", "refId": "A" }
+      ]
+    },
+
+    {
+      "id": 9,
+      "title": "Location Anomaly Alerts",
+      "description": "Alerts triggered by impossible-travel detection (Haversine distance exceeded)",
+      "type": "stat",
+      "gridPos": { "h": 5, "w": 6, "x": 18, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#8b5cf6", "mode": "fixed" },
+          "unit": "short", "decimals": 0
+        },
+        "overrides": []
+      },
+      "targets": [
+        { "expr": "sum(detector_fraud_reasons_total{reason=\"location_anomaly\"})", "legendFormat": "location", "refId": "A" }
+      ]
+    }
+
+  ],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": ["fraud-detection", "transactions", "analytics", "business"],
+  "templating": { "list": [] },
+  "time": { "from": "now-30m", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Transaction Analytics",
+  "uid": "transaction-analytics",
+  "version": 1
+}
