@@ -4,11 +4,10 @@
   "graphTooltip": 1,
   "links": [],
   "panels": [
-
     {
       "id": 1,
-      "title": "Fraud Detector Throughput",
-      "description": "Transactions evaluated per second, split by outcome (ok vs fraud)",
+      "title": "Pipeline Throughput",
+      "description": "Produced vs processed transactions per second. These should stay close when the pipeline is keeping up.",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
@@ -16,209 +15,165 @@
         "defaults": {
           "color": { "mode": "palette-classic" },
           "unit": "reqps",
-          "custom": { "fillOpacity": 15, "lineWidth": 2, "spanNulls": false }
+          "custom": { "fillOpacity": 12, "lineWidth": 2, "spanNulls": false }
         },
         "overrides": [
-          { "matcher": { "id": "byName", "options": "fraud" }, "properties": [{ "id": "color", "value": { "fixedColor": "#ef4444", "mode": "fixed" } }] },
-          { "matcher": { "id": "byName", "options": "ok"    }, "properties": [{ "id": "color", "value": { "fixedColor": "#10b981", "mode": "fixed" } }] }
+          {
+            "matcher": { "id": "byName", "options": "produced" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#2563eb", "mode": "fixed" } }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "processed" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#16a34a", "mode": "fixed" } }
+            ]
+          }
         ]
       },
       "targets": [
-        { "expr": "rate(detector_transactions_processed_total{outcome=\"ok\"}[1m])",    "legendFormat": "ok",    "refId": "A" },
-        { "expr": "rate(detector_transactions_processed_total{outcome=\"fraud\"}[1m])", "legendFormat": "fraud", "refId": "B" }
+        {
+          "expr": "sum(rate(producer_transactions_produced_total[1m]))",
+          "legendFormat": "produced",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(detector_transactions_processed_total[1m]))",
+          "legendFormat": "processed",
+          "refId": "B"
+        }
       ]
     },
-
     {
       "id": 2,
-      "title": "Evaluation Latency — p50 / p95 / p99",
-      "description": "How long the fraud detector spends evaluating a single transaction (Redis lookups included)",
+      "title": "Detector Latency p95",
+      "description": "95th percentile time spent evaluating a transaction, including Redis state checks.",
       "type": "timeseries",
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
+          "color": { "fixedColor": "#7c3aed", "mode": "fixed" },
           "unit": "s",
-          "custom": { "fillOpacity": 8, "lineWidth": 2 }
-        },
-        "overrides": []
-      },
-      "targets": [
-        { "expr": "histogram_quantile(0.50, rate(detector_evaluation_duration_seconds_bucket[1m]))", "legendFormat": "p50", "refId": "A" },
-        { "expr": "histogram_quantile(0.95, rate(detector_evaluation_duration_seconds_bucket[1m]))", "legendFormat": "p95", "refId": "B" },
-        { "expr": "histogram_quantile(0.99, rate(detector_evaluation_duration_seconds_bucket[1m]))", "legendFormat": "p99", "refId": "C" }
-      ]
-    },
-
-    {
-      "id": 3,
-      "title": "Redis Memory Used",
-      "description": "Bytes consumed by Redis — includes user state sorted-sets and last-transaction cache",
-      "type": "timeseries",
-      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "#3b82f6", "mode": "fixed" },
-          "unit": "bytes",
-          "custom": { "fillOpacity": 20, "lineWidth": 2 }
-        },
-        "overrides": []
-      },
-      "targets": [
-        { "expr": "redis_memory_used_bytes", "legendFormat": "used", "refId": "A" }
-      ]
-    },
-
-    {
-      "id": 4,
-      "title": "Redis Hit Rate",
-      "description": "Ratio of cache hits to total lookups — low hit rate means detector is seeing many new users",
-      "type": "timeseries",
-      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "#10b981", "mode": "fixed" },
-          "unit": "percentunit",
-          "min": 0, "max": 1,
-          "custom": { "fillOpacity": 15, "lineWidth": 2 }
+          "custom": { "fillOpacity": 10, "lineWidth": 2, "spanNulls": false }
         },
         "overrides": []
       },
       "targets": [
         {
-          "expr": "rate(redis_keyspace_hits_total[1m]) / (rate(redis_keyspace_hits_total[1m]) + rate(redis_keyspace_misses_total[1m]))",
-          "legendFormat": "hit rate",
+          "expr": "histogram_quantile(0.95, sum(rate(detector_evaluation_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p95 latency",
           "refId": "A"
         }
       ]
     },
-
     {
-      "id": 5,
-      "title": "Redis Connected Clients",
-      "description": "Active connections to Redis — each detector replica + producer replica holds one",
-      "type": "timeseries",
-      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "fixedColor": "#f59e0b", "mode": "fixed" },
-          "custom": { "fillOpacity": 10, "lineWidth": 2 }
-        },
-        "overrides": []
-      },
-      "targets": [
-        { "expr": "redis_connected_clients", "legendFormat": "clients", "refId": "A" }
-      ]
-    },
-
-    {
-      "id": 6,
-      "title": "Sliding Window Depth",
-      "description": "Number of transactions inside the high-frequency detection window at last evaluation. Threshold triggers fraud above 4.",
-      "type": "gauge",
-      "gridPos": { "h": 7, "w": 6, "x": 0, "y": 15 },
-      "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "thresholds" },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              { "color": "#10b981", "value": null },
-              { "color": "#f59e0b", "value": 3 },
-              { "color": "#ef4444", "value": 5 }
-            ]
-          },
-          "min": 0, "max": 10
-        },
-        "overrides": []
-      },
-      "targets": [
-        { "expr": "detector_window_transaction_count", "legendFormat": "window depth", "refId": "A" }
-      ]
-    },
-
-    {
-      "id": 7,
-      "title": "Producer Error Rate",
-      "description": "Rate of Kafka delivery failures from the producer. Should be 0 under normal operation.",
+      "id": 3,
+      "title": "Producer Errors (5m)",
+      "description": "Kafka delivery failures in the last 5 minutes. This should normally be zero.",
       "type": "stat",
-      "gridPos": { "h": 7, "w": 6, "x": 6, "y": 15 },
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "orientation": "auto", "text": {}, "colorMode": "background", "graphMode": "area" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "auto",
+        "text": {},
+        "colorMode": "background",
+        "graphMode": "none"
+      },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
-          "unit": "reqps",
+          "unit": "short",
+          "decimals": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "#10b981", "value": null },
-              { "color": "#ef4444", "value": 0.001 }
+              { "color": "#16a34a", "value": null },
+              { "color": "#dc2626", "value": 1 }
             ]
           }
         },
         "overrides": []
       },
       "targets": [
-        { "expr": "rate(producer_errors_total[1m])", "legendFormat": "error rate", "refId": "A" }
+        {
+          "expr": "sum(increase(producer_errors_total[5m]))",
+          "legendFormat": "errors",
+          "refId": "A"
+        }
       ]
     },
-
     {
-      "id": 8,
-      "title": "Producer Throughput",
-      "description": "Transactions sent to Kafka per second across all producer replicas",
+      "id": 4,
+      "title": "Redis Memory Used",
+      "description": "Current Redis memory footprint for detector state such as last transaction and recent transaction windows.",
       "type": "stat",
-      "gridPos": { "h": 7, "w": 6, "x": 12, "y": 15 },
+      "gridPos": { "h": 6, "w": 8, "x": 8, "y": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "area" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "auto",
+        "text": {},
+        "colorMode": "value",
+        "graphMode": "area"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "#3b82f6", "mode": "fixed" },
-          "unit": "reqps"
+          "color": { "fixedColor": "#0891b2", "mode": "fixed" },
+          "unit": "bytes",
+          "decimals": 1
         },
         "overrides": []
       },
       "targets": [
-        { "expr": "sum(rate(producer_transactions_produced_total[1m]))", "legendFormat": "txn/s", "refId": "A" }
+        {
+          "expr": "redis_memory_used_bytes",
+          "legendFormat": "memory",
+          "refId": "A"
+        }
       ]
     },
-
     {
-      "id": 9,
-      "title": "Cumulative Transactions Produced",
-      "description": "Total number of transactions ever sent to Kafka across all replicas (resets on restart)",
+      "id": 5,
+      "title": "Redis Connected Clients",
+      "description": "Current client connections to Redis from the running services and exporters.",
       "type": "stat",
-      "gridPos": { "h": 7, "w": 6, "x": 18, "y": 15 },
+      "gridPos": { "h": 6, "w": 8, "x": 16, "y": 8 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "auto",
+        "text": {},
+        "colorMode": "value",
+        "graphMode": "area"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": { "fixedColor": "#6366f1", "mode": "fixed" },
+          "color": { "fixedColor": "#ea580c", "mode": "fixed" },
           "unit": "short",
           "decimals": 0
         },
         "overrides": []
       },
       "targets": [
-        { "expr": "sum(producer_transactions_produced_total)", "legendFormat": "total", "refId": "A" }
+        {
+          "expr": "redis_connected_clients",
+          "legendFormat": "clients",
+          "refId": "A"
+        }
       ]
     }
-
   ],
   "refresh": "5s",
   "schemaVersion": 39,
-  "tags": ["fraud-detection", "backend", "ops", "latency"],
+  "tags": ["fraud-detection", "backend", "ops"],
   "templating": { "list": [] },
   "time": { "from": "now-15m", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
   "title": "Backend Operations",
   "uid": "backend-ops",
-  "version": 1
+  "version": 2
 }
